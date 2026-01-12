@@ -1,0 +1,344 @@
+==================
+Empty struct
+==================
+
+{}
+
+---
+
+(source_file
+  (script
+    (struct)))
+
+==================
+Struct with fields
+==================
+
+{ x: a, y: b }
+
+---
+
+(source_file
+  (script
+    (struct
+      (key_value
+        (key
+          (identifier))
+        (variable
+          (identifier)))
+      (key_value
+        (key
+          (identifier))
+        (variable
+          (identifier))))))
+
+==================
+Row with fields
+==================
+
+( x: a, y: b )
+
+---
+
+(source_file
+  (script
+    (row
+      (key_value
+        (key
+          (identifier))
+        (variable
+          (identifier)))
+      (key_value
+        (key
+          (identifier))
+        (variable
+          (identifier))))))
+
+==================
+Tuple with elements
+==================
+
+{ a, b, c }
+
+---
+
+(source_file
+  (script
+    (tuple
+      (variable
+        (identifier))
+      (variable
+        (identifier))
+      (variable
+        (identifier)))))
+
+==================
+Empty Lit
+==================
+
+[]
+
+---
+
+(source_file
+  (script
+    (list)))
+
+==================
+List with literals
+==================
+
+[1, 2, 3]
+
+---
+
+(source_file
+  (script
+    (list
+      (literal
+        (number))
+      (literal
+        (number))
+      (literal
+        (number)))))
+
+==================
+Struct with numeric keys
+==================
+
+{ 0: int, 1: string }
+
+---
+
+(source_file
+  (script
+    (struct
+      (key_value
+        (key
+          (index))
+        (variable
+          (identifier)))
+      (key_value
+        (key
+          (index))
+        (variable
+          (identifier))))))
+
+==================
+Tagged constructor
+==================
+
+#Cons x
+
+---
+
+(source_file
+  (script
+    (tagged
+      (identifier)
+      (variable
+        (identifier)))))
+
+==================
+Tagged with struct
+==================
+
+#Some { x: 1 }
+
+---
+
+(source_file
+  (script
+    (tagged
+      (identifier)
+      (struct
+        (key_value
+          (key
+            (identifier))
+          (literal
+            (number)))))))
+
+==================
+Variant with multiple tags
+==================
+
+| #Nil | #Cons a
+
+---
+
+(source_file
+  (script
+    (variant
+      (tagged
+        (identifier)
+        (variant
+          (tagged
+            (identifier)
+            (variable
+              (identifier))))))))
+
+==================
+Dict type
+==================
+
+{ [Int]: String }
+
+---
+
+(source_file
+  (script
+    (tuple
+      (ann
+        (list
+          (variable
+            (identifier)))
+        (variable
+          (identifier))))))
+
+==================
+Record update injection
+==================
+
+{ r | x = 1 }
+
+---
+
+(source_file
+  (script
+    (injection
+      (variable
+        (identifier))
+      (assignment
+        (identifier)
+        (literal
+          (number))))))
+
+==================
+Injection with multiple assignments
+==================
+
+{ | x = 1, y = 2 }
+
+---
+
+(source_file
+  (script
+    (injection
+      (assignment
+        (identifier)
+        (literal
+          (number)))
+      (assignment
+        (identifier)
+        (literal
+          (number))))))
+
+==================
+Row with tail variable
+==================
+
+[ x: a | rest ]
+
+---
+
+(source_file
+  (script
+    (list
+      (ann
+        (variable
+          (identifier))
+        (variable
+          (identifier)))
+      (identifier))))
+
+==================
+Struct with tail variable
+==================
+
+{ x: a | rest }
+
+---
+
+(source_file
+  (script
+    (struct
+      (key_value
+        (key
+          (identifier))
+        (variable
+          (identifier)))
+      (identifier))))
+
+==================
+Tuple with tail variable
+==================
+
+{ a, b | rest }
+
+---
+
+(source_file
+  (script
+    (tuple
+      (variable
+        (identifier))
+      (variable
+        (identifier))
+      (identifier))))
+
+==================
+List with tail variable
+==================
+
+[a, b | rest]
+
+---
+
+(source_file
+  (script
+    (list
+      (variable
+        (identifier))
+      (variable
+        (identifier))
+      (identifier))))
+
+==================
+Tagged with tuple payload
+==================
+
+#Cons { x, y }
+
+---
+
+(source_file
+  (script
+    (tagged
+      (identifier)
+      (tuple
+        (variable
+          (identifier))
+        (variable
+          (identifier))))))
+
+==================
+Tagged with variant payload
+==================
+
+#Either | #Left a | #Right b
+
+---
+
+(source_file
+  (script
+    (tagged
+      (identifier)
+      (variant
+        (tagged
+          (identifier)
+          (variable
+            (identifier)))
+        (tagged
+          (identifier)
+          (variable
+            (identifier)))))))

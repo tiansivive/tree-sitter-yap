@@ -1,0 +1,123 @@
+
+==================
+Modal type with quantity and refinement
+==================
+
+<*> Type [| \x -> x |]
+
+---
+
+(source_file
+  (script
+    (modal_type
+      (quantity)
+      (literal)
+      (lambda
+        (param
+          (identifier))
+        (variable
+          (identifier))))))
+
+==================
+Modal type with 1 quantity
+==================
+
+<1> Int [| \x -> x |]
+
+---
+
+(source_file
+  (script
+    (modal_type
+      (quantity)
+      (variable
+        (identifier))
+      (lambda
+        (param
+          (identifier))
+        (variable
+          (identifier))))))
+
+==================
+Modal type with 0 quantity
+==================
+
+<0> Type
+
+---
+
+(source_file
+  (script
+    (modal_type
+      (quantity)
+      (literal))))
+
+==================
+Modal type without refinement
+==================
+
+<1> String
+
+---
+
+(source_file
+  (script
+    (modal_type
+      (quantity)
+      (variable
+        (identifier)))))
+
+==================
+Modal type with * quantity
+==================
+
+<*> Type
+
+---
+
+(source_file
+  (script
+    (modal_type
+      (quantity)
+      (literal))))
+
+==================
+Type with refinement only
+==================
+
+Type [| \x -> true |]
+
+---
+
+(source_file
+  (script
+    (modal_type
+      (literal)
+      (lambda
+        (param
+          (identifier))
+        (literal
+          (boolean))))))
+
+==================
+Modal with complex refinement
+==================
+
+<1> Int [| \x -> x > 0 |]
+
+---
+
+(source_file
+  (script
+    (modal_type
+      (quantity)
+      (variable
+        (identifier))
+      (lambda
+        (param
+          (identifier))
+        (operation
+          (variable
+            (identifier))
+          (literal
+            (number)))))))

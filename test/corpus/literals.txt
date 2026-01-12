@@ -1,0 +1,241 @@
+==================
+String literal
+==================
+
+"hello"
+
+---
+
+(source_file
+  (script
+    (literal
+      (string))))
+
+==================
+String with escapes
+==================
+
+"hello\nworld"
+
+---
+
+(source_file
+  (script
+    (literal
+      (string))))
+
+==================
+Integer literal
+==================
+
+42
+
+---
+
+(source_file
+  (script
+    (literal
+      (number))))
+
+==================
+Float literal
+==================
+
+3.14
+
+---
+
+(source_file
+  (script
+    (literal
+      (number))))
+
+==================
+Zero
+==================
+
+0
+
+---
+
+(source_file
+  (script
+    (literal
+      (number))))
+
+==================
+Boolean true
+==================
+
+true
+
+---
+
+(source_file
+  (script
+    (literal
+      (boolean))))
+
+==================
+Boolean false
+==================
+
+false
+
+---
+
+(source_file
+  (script
+    (literal
+      (boolean))))
+
+==================
+Type keyword
+==================
+
+Type
+
+---
+
+(source_file
+  (script
+    (literal)))
+
+==================
+Unit keyword
+==================
+
+Unit
+
+---
+
+(source_file
+  (script
+    (literal)))
+
+==================
+Hole keyword
+==================
+
+!
+
+---
+
+(source_file
+  (script
+    (literal)))
+
+==================
+Row keyword
+==================
+
+Row
+
+---
+
+(source_file
+  (script
+    (literal)))
+
+==================
+? as hole
+==================
+
+?
+
+---
+
+(source_file
+  (script
+    (hole)))
+
+==================
+Label literal
+==================
+
+:myLabel
+
+---
+
+(source_file
+  (script
+    (variable
+      (label))))
+
+==================
+Identifier variable
+==================
+
+myVar
+
+---
+
+(source_file
+  (script
+    (variable
+      (identifier))))
+
+==================
+Camel case identifier
+==================
+
+camelCaseVar
+
+---
+
+(source_file
+  (script
+    (variable
+      (identifier))))
+
+==================
+Capital identifier
+==================
+
+MyType
+
+---
+
+(source_file
+  (script
+    (variable
+      (identifier))))
+
+==================
+Empty string
+==================
+
+""
+
+---
+
+(source_file
+  (script
+    (literal
+      (string))))
+
+==================
+Negative number
+==================
+
+-42
+
+---
+
+(source_file
+  (script
+    (literal
+      (number))))
+
+==================
+Multi-line string
+==================
+
+"line1\nline2\nline3"
+
+---
+
+(source_file
+  (script
+    (literal
+      (string))))

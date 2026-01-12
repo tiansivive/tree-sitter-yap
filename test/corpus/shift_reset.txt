@@ -1,0 +1,161 @@
+==================
+Reset expression
+==================
+
+reset x
+
+---
+
+(source_file
+  (script
+    (reset
+      (variable
+        (identifier)))))
+
+==================
+Shift expression
+==================
+
+shift x
+
+---
+
+(source_file
+  (script
+    (shift
+      (variable
+        (identifier)))))
+
+==================
+Resume expression
+==================
+
+resume x
+
+---
+
+(source_file
+  (script
+    (resume
+      (variable
+        (identifier)))))
+
+==================
+Reset with application
+==================
+
+reset f x
+
+---
+
+(source_file
+  (script
+    (reset
+      (application
+        (variable
+          (identifier))
+        (variable
+          (identifier))))))
+
+==================
+Shift with injection
+==================
+
+shift { x | y = 1 }
+
+---
+
+(source_file
+  (script
+    (shift
+      (injection
+        (variable
+          (identifier))
+        (assignment
+          (identifier)
+          (literal
+            (number)))))))
+
+==================
+Reset with lambda
+==================
+
+reset \x -> x
+
+---
+
+(source_file
+  (script
+    (reset
+      (lambda
+        (param
+          (identifier))
+        (variable
+          (identifier))))))
+
+==================
+Nested reset-shift
+==================
+
+reset shift x
+
+---
+
+(source_file
+  (script
+    (reset
+      (shift
+        (variable
+          (identifier))))))
+
+
+==================
+Shift in application context
+==================
+
+f (shift x)
+
+---
+
+(source_file
+  (script
+    (application
+      (variable
+        (identifier))
+      (parenthesized
+        (shift
+          (variable
+            (identifier)))))))
+
+==================
+Reset in lambda body
+==================
+
+\x -> reset y
+
+---
+
+(source_file
+  (script
+    (lambda
+      (param
+        (identifier))
+      (reset
+        (variable
+          (identifier))))))
+
+==================
+Chained reset-shift-resume
+==================
+
+reset shift resume x
+
+---
+
+(source_file
+  (script
+    (reset
+      (shift
+        (resume
+          (variable
+            (identifier)))))))

@@ -1,0 +1,434 @@
+==================
+Addition
+==================
+
+1 + 2
+
+---
+
+(source_file
+  (script
+    (operation
+      (literal
+        (number))
+      (literal
+        (number)))))
+
+==================
+Subtraction
+==================
+
+5 - 3
+
+---
+
+(source_file
+  (script
+    (operation
+      (literal
+        (number))
+      (literal
+        (number)))))
+
+==================
+Multiplication
+==================
+
+3 * 4
+
+---
+
+(source_file
+  (script
+    (operation
+      (literal
+        (number))
+      (literal
+        (number)))))
+
+==================
+Division
+==================
+
+10 / 2
+
+---
+
+(source_file
+  (script
+    (operation
+      (literal
+        (number))
+      (literal
+        (number)))))
+
+==================
+Modulo
+==================
+
+10 % 3
+
+---
+
+(source_file
+  (script
+    (operation
+      (literal
+        (number))
+      (literal
+        (number)))))
+
+==================
+String concatenation
+==================
+
+"hello" ++ "world"
+
+---
+
+(source_file
+  (script
+    (operation
+      (literal
+        (string))
+      (literal
+        (string)))))
+
+==================
+List concatenation
+==================
+
+a <> b
+
+---
+
+(source_file
+  (script
+    (operation
+      (variable
+        (identifier))
+      (variable
+        (identifier)))))
+
+==================
+Equality
+==================
+
+x == y
+
+---
+
+(source_file
+  (script
+    (operation
+      (variable
+        (identifier))
+      (variable
+        (identifier)))))
+
+==================
+Inequality
+==================
+
+x != y
+
+---
+
+(source_file
+  (script
+    (operation
+      (variable
+        (identifier))
+      (variable
+        (identifier)))))
+
+==================
+Less than
+==================
+
+a < b
+
+---
+
+(source_file
+  (script
+    (operation
+      (variable
+        (identifier))
+      (variable
+        (identifier)))))
+
+==================
+Greater than
+==================
+
+a > b
+
+---
+
+(source_file
+  (script
+    (operation
+      (variable
+        (identifier))
+      (variable
+        (identifier)))))
+
+==================
+Less than or equal
+==================
+
+a <= b
+
+---
+
+(source_file
+  (script
+    (operation
+      (variable
+        (identifier))
+      (variable
+        (identifier)))))
+
+==================
+Greater than or equal
+==================
+
+a >= b
+
+---
+
+(source_file
+  (script
+    (operation
+      (variable
+        (identifier))
+      (variable
+        (identifier)))))
+
+==================
+Logical and
+==================
+
+a && b
+
+---
+
+(source_file
+  (script
+    (operation
+      (variable
+        (identifier))
+      (variable
+        (identifier)))))
+
+==================
+Logical or
+==================
+
+a || b
+
+---
+
+(source_file
+  (script
+    (operation
+      (variable
+        (identifier))
+      (variable
+        (identifier)))))
+
+==================
+Pipeline forward
+==================
+
+x |> f
+
+---
+
+(source_file
+  (script
+    (operation
+      (variable
+        (identifier))
+      (variable
+        (identifier)))))
+
+==================
+Pipeline backward
+==================
+
+f <| x
+
+---
+
+(source_file
+  (script
+    (operation
+      (variable
+        (identifier))
+      (variable
+        (identifier)))))
+
+==================
+Mixed arithmetic
+==================
+
+1 + 2 * 3 - 4
+
+---
+
+(source_file
+  (script
+    (operation
+      (operation
+        (literal
+          (number))
+        (operation
+          (literal
+            (number))
+          (literal
+            (number))))
+      (literal
+        (number)))))
+
+==================
+Chained comparisons
+==================
+
+a < b && b < c
+
+---
+
+(source_file
+  (script
+    (operation
+      (operation
+        (variable
+          (identifier))
+        (variable
+          (identifier)))
+      (operation
+        (variable
+          (identifier))
+        (variable
+          (identifier))))))
+
+==================
+Or looser than and
+==================
+
+a && b || c && d
+
+---
+
+(source_file
+  (script
+    (operation
+      (operation
+        (variable
+          (identifier))
+        (variable
+          (identifier)))
+      (operation
+        (variable
+          (identifier))
+        (variable
+          (identifier))))))
+
+==================
+Complex expression
+==================
+
+a + b * c + d / e - f
+
+---
+
+(source_file
+  (script
+    (operation
+      (operation
+        (operation
+          (variable
+            (identifier))
+          (operation
+            (variable
+              (identifier))
+            (variable
+              (identifier))))
+        (operation
+          (variable
+            (identifier))
+          (variable
+            (identifier))))
+      (variable
+        (identifier)))))
+
+==================
+Pipeline with operations
+==================
+
+a |> f + g
+
+---
+
+(source_file
+  (script
+    (operation
+      (variable
+        (identifier))
+      (operation
+        (variable
+          (identifier))
+        (variable
+          (identifier))))))
+
+==================
+Comparison chain
+==================
+
+x < y && y < z && z < w
+
+---
+
+(source_file
+  (script
+    (operation
+      (operation
+        (operation
+          (variable
+            (identifier))
+          (variable
+            (identifier)))
+        (operation
+          (variable
+            (identifier))
+          (variable
+            (identifier))))
+      (operation
+        (variable
+          (identifier))
+        (variable
+          (identifier))))))
+
+==================
+Application higher than operations
+==================
+
+f x + g y
+
+---
+
+(source_file
+  (script
+    (operation
+      (application
+        (variable
+          (identifier))
+        (variable
+          (identifier)))
+      (application
+        (variable
+          (identifier))
+        (variable
+          (identifier))))))

@@ -1,0 +1,271 @@
+==================
+Block with return
+==================
+
+{ return x; }
+
+---
+
+(source_file
+  (script
+    (block
+      (return_statement
+        (variable
+          (identifier))))))
+
+==================
+Block with let and return
+==================
+
+{ let x = 1; return x; }
+
+---
+
+(source_file
+  (script
+    (block
+      (letdec
+        (identifier)
+        (literal
+          (number)))
+      (return_statement
+        (variable
+          (identifier))))))
+
+==================
+Block with multiple lets
+==================
+
+{ let x = 1; let y = 2; return {x, y}; }
+
+---
+
+(source_file
+  (script
+    (block
+      (letdec
+        (identifier)
+        (literal
+          (number)))
+      (letdec
+        (identifier)
+        (literal
+          (number)))
+      (return_statement
+        (tuple
+          (variable
+            (identifier))
+          (variable
+            (identifier)))))))
+
+==================
+Block with typed let
+==================
+
+{ let x : Int = 1; return x; }
+
+---
+
+(source_file
+  (script
+    (block
+      (letdec
+        (identifier)
+        (variable
+          (identifier))
+        (literal
+          (number)))
+      (return_statement
+        (variable
+          (identifier))))))
+
+==================
+Using statement
+==================
+
+using x : Type
+
+---
+
+(source_file
+  (script
+    (using
+      (ann
+        (variable
+          (identifier))
+        (literal)))))
+
+==================
+Using with alias
+==================
+
+using x : Type as myX
+
+---
+
+(source_file
+  (script
+    (using
+      (ann
+        (variable
+          (identifier))
+        (literal))
+      (identifier))))
+
+==================
+Foreign declaration
+==================
+
+foreign primAdd : Int
+
+---
+
+(source_file
+  (script
+    (foreign
+      (identifier)
+      (variable
+        (identifier)))))
+
+==================
+Multiple statements
+==================
+
+let x = 1; let y = 2; x
+
+---
+
+(source_file
+  (script
+    (letdec
+      (identifier)
+      (literal
+        (number)))
+    (letdec
+      (identifier)
+      (literal
+        (number)))
+    (variable
+      (identifier))))
+
+==================
+Block with complex expressions
+==================
+
+{ let f = \x -> x + 1; return f 5 : Int; }
+
+---
+
+(source_file
+  (script
+    (block
+      (letdec
+        (identifier)
+        (lambda
+          (param
+            (identifier))
+          (operation
+            (variable
+              (identifier))
+            (literal
+              (number)))))
+      (return_statement
+        (ann
+          (application
+            (variable
+              (identifier))
+            (literal
+              (number)))
+          (variable
+            (identifier)))))))
+
+==================
+Nested blocks
+==================
+
+{ return { return x : Type; } : Type; }
+
+---
+
+(source_file
+  (script
+    (block
+      (return_statement
+        (ann
+          (block
+            (return_statement
+              (ann
+                (variable
+                  (identifier))
+                (literal))))
+          (literal))))))
+
+==================
+Let with application
+==================
+
+let f = g x y
+
+---
+
+(source_file
+  (script
+    (letdec
+      (identifier)
+      (application
+        (application
+          (variable
+            (identifier))
+          (variable
+            (identifier)))
+        (variable
+          (identifier))))))
+
+==================
+Let with struct value
+==================
+
+let r = { x: 1, y: 2 }
+
+---
+
+(source_file
+  (script
+    (letdec
+      (identifier)
+      (struct
+        (key_value
+          (key
+            (identifier))
+          (literal
+            (number)))
+        (key_value
+          (key
+            (identifier))
+          (literal
+            (number)))))))
+
+==================
+Statement with return type annotation
+==================
+
+return f x : Int -> String;
+
+---
+
+(source_file
+  (script
+    (arrow
+      (ann
+        (application
+          (application
+            (variable
+              (identifier))
+            (variable
+              (identifier)))
+          (variable
+            (identifier)))
+        (variable
+          (identifier)))
+      (variable
+        (identifier)))))

@@ -20,7 +20,7 @@
 "true" @boolean
 "false" @boolean
 "!" @constant.builtin
-"_" @variable.parameter
+
 
 ;; Mu and lambda syntax
 "μ" @keyword
@@ -114,8 +114,7 @@
 (number) @number
 
 ;; Labels
-(label
-  (identifier) @label)
+(label) @label
 
 ;; Comments
 (comment) @comment

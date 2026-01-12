@@ -1,0 +1,72 @@
+==================
+Simple letdec
+==================
+
+let x = 42
+
+---
+
+(source_file
+  (script
+    (letdec
+      (identifier)
+      (literal
+        (number)))))
+
+==================
+Letdec with type
+==================
+
+let x : Int = 42
+
+---
+
+(source_file
+  (script
+    (letdec
+      (identifier)
+      (variable
+        (identifier))
+      (literal
+        (number)))))
+
+==================
+Letdec with lambda value
+==================
+
+let f = \x -> x
+
+---
+
+(source_file
+  (script
+    (letdec
+      (identifier)
+      (lambda
+        (param
+          (identifier))
+        (variable
+          (identifier))))))
+
+==================
+Letdec with complex type
+==================
+
+let f : Int -> String = \x -> x
+
+---
+
+(source_file
+  (script
+    (letdec
+      (identifier)
+      (arrow
+        (variable
+          (identifier))
+        (variable
+          (identifier)))
+      (lambda
+        (param
+          (identifier))
+        (variable
+          (identifier))))))

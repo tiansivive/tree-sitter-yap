@@ -1,0 +1,302 @@
+==================
+Lambda with single param
+==================
+
+\x -> x
+
+---
+
+(source_file
+  (script
+    (lambda
+      (param
+        (identifier))
+      (variable
+        (identifier)))))
+
+==================
+Lambda with multiple params
+==================
+
+\x y z -> f x y z
+
+---
+
+(source_file
+  (script
+    (lambda
+      (param
+        (identifier))
+      (param
+        (identifier))
+      (param
+        (identifier))
+      (application
+        (application
+          (application
+            (variable
+              (identifier))
+            (variable
+              (identifier)))
+          (variable
+            (identifier)))
+        (variable
+          (identifier))))))
+
+==================
+Lambda with typed param
+==================
+
+\(x:Int) -> x
+
+---
+
+(source_file
+  (script
+    (lambda
+      (param
+        (typed_param
+          (identifier)
+          (variable
+            (identifier))))
+      (variable
+        (identifier)))))
+
+==================
+Lambda with multiple typed params
+==================
+
+\(x:Int) (y:Int) -> x
+
+---
+
+(source_file
+  (script
+    (lambda
+      (param
+        (typed_param
+          (identifier)
+          (variable
+            (identifier))))
+      (param
+        (typed_param
+          (identifier)
+          (variable
+            (identifier))))
+      (variable
+        (identifier)))))
+
+==================
+Lambda with mixed params
+==================
+
+\x (y:Int) -> y
+
+---
+
+(source_file
+  (script
+    (lambda
+      (param
+        (identifier))
+      (param
+        (typed_param
+          (identifier)
+          (variable
+            (identifier))))
+      (variable
+        (identifier)))))
+
+==================
+Pi type simple
+==================
+
+Int -> String
+
+---
+
+(source_file
+  (script
+    (arrow
+      (variable
+        (identifier))
+      (variable
+        (identifier)))))
+
+==================
+Pi type right-associative
+==================
+
+Int -> String -> Bool
+
+---
+
+(source_file
+  (script
+    (arrow
+      (variable
+        (identifier))
+      (arrow
+        (variable
+          (identifier))
+        (variable
+          (identifier))))))
+
+==================
+Dependent pi type
+==================
+
+(x:Int) -> Int
+
+---
+
+(source_file
+  (script
+    (arrow
+      (parenthesized
+        (application
+          (variable
+            (identifier))
+          (variable
+            (label))))
+      (variable
+        (identifier)))))
+
+==================
+Lambda with fat arrow
+==================
+
+\x => x
+
+---
+
+(source_file
+  (script
+    (lambda
+      (param
+        (identifier))
+      (variable
+        (identifier)))))
+
+==================
+Pi with fat arrow
+==================
+
+Int => String
+
+---
+
+(source_file
+  (script
+    (arrow
+      (variable
+        (identifier))
+      (variable
+        (identifier)))))
+
+==================
+Mu type
+==================
+
+μ list -> | #Nil | #Cons a list
+
+---
+
+(source_file
+  (script
+    (mu
+      (identifier)
+      (variant
+        (tagged
+          (identifier)
+          (variant
+            (tagged
+              (identifier)
+              (application
+                (variable
+                  (identifier))
+                (variable
+                  (identifier))))))))))
+
+==================
+Parenthesized type
+==================
+
+(Int)
+
+---
+
+(source_file
+  (script
+    (parenthesized
+      (variable
+        (identifier)))))
+
+==================
+Parenthesized complex type
+==================
+
+((a:Int) -> String)
+
+---
+
+(source_file
+  (script
+    (parenthesized
+      (arrow
+        (parenthesized
+          (application
+            (variable
+              (identifier))
+            (variable
+              (label))))
+        (variable
+          (identifier))))))
+
+==================
+Lambda body with projection and application
+==================
+
+\x y -> x.f y
+
+---
+
+(source_file
+  (script
+    (lambda
+      (param
+        (identifier))
+      (param
+        (identifier))
+      (application
+        (projection
+          (variable
+            (identifier))
+          (identifier))
+        (variable
+          (identifier))))))
+
+==================
+Lambda with struct pattern
+==================
+
+\(x:{ foo: 1}) -> x.a
+
+---
+
+(source_file
+  (script
+    (lambda
+      (param
+        (typed_param
+          (identifier)
+          (struct
+            (key_value
+              (key
+                (identifier))
+              (variable
+                (identifier))))))
+      (projection
+        (variable
+          (identifier))
+        (identifier)))))

@@ -1,0 +1,317 @@
+==================
+Match with wildcard
+==================
+
+match x | _ -> y
+
+---
+
+(source_file
+  (script
+    (match
+      (variable
+        (identifier))
+      (alternative
+        (wildcard)
+        (variable
+          (identifier))))))
+
+==================
+Match with tagged pattern
+==================
+
+match x | #Cons h -> h
+
+---
+
+(source_file
+  (script
+    (match
+      (variable
+        (identifier))
+      (alternative
+        (pattern_tagged
+          (identifier)
+          (pattern_variable
+            (identifier)))
+        (variable
+          (identifier))))))
+
+
+==================
+Pattern variable
+==================
+
+match n | x -> x
+
+---
+
+(source_file
+  (script
+    (match
+      (variable
+        (identifier))
+      (alternative
+        (pattern_variable
+          (identifier))
+        (variable
+          (identifier))))))
+
+==================
+Pattern literal
+==================
+
+match n | 42 -> 0
+
+---
+
+(source_file
+  (script
+    (match
+      (variable
+        (identifier))
+      (alternative
+        (pattern_literal
+          (literal
+            (number)))
+        (literal
+          (number))))))
+
+==================
+Pattern empty struct
+==================
+
+match n | {} -> x
+
+---
+
+(source_file
+  (script
+    (match
+      (variable
+        (identifier))
+      (alternative
+        (pattern_struct)
+        (variable
+          (identifier))))))
+
+==================
+Pattern struct with fields
+==================
+
+match n | { x: a, y: b } -> x
+
+---
+
+(source_file
+  (script
+    (match
+      (variable
+        (identifier))
+      (alternative
+        (pattern_struct
+          (pattern_key_value
+            (identifier)
+            (pattern_variable
+              (identifier)))
+          (pattern_key_value
+            (identifier)
+            (pattern_variable
+              (identifier))))
+        (variable
+          (identifier))))))
+
+==================
+Pattern tuple
+==================
+
+match n | { a, b } -> a
+
+---
+
+(source_file
+  (script
+    (match
+      (variable
+        (identifier))
+      (alternative
+        (pattern_tuple
+          (pattern_variable
+            (identifier))
+          (pattern_variable
+            (identifier)))
+        (variable
+          (identifier))))))
+
+==================
+Pattern list
+==================
+
+match n | [a, b, c] -> a
+
+---
+
+(source_file
+  (script
+    (match
+      (variable
+        (identifier))
+      (alternative
+        (pattern_list
+          (pattern_variable
+            (identifier))
+          (pattern_variable
+            (identifier))
+          (pattern_variable
+            (identifier)))
+        (variable
+          (identifier))))))
+
+==================
+Pattern row
+==================
+
+match n | [x: a, y: b] -> x
+
+---
+
+(source_file
+  (script
+    (match
+      (variable
+        (identifier))
+      (alternative
+        (pattern_row
+          (pattern_key_value
+            (identifier)
+            (pattern_variable
+              (identifier)))
+          (pattern_key_value
+            (identifier)
+            (pattern_variable
+              (identifier))))
+        (variable
+          (identifier))))))
+
+==================
+Pattern tagged with variable
+==================
+
+match n | #Some x -> x
+
+---
+
+(source_file
+  (script
+    (match
+      (variable
+        (identifier))
+      (alternative
+        (pattern_tagged
+          (identifier)
+          (pattern_variable
+            (identifier)))
+        (variable
+          (identifier))))))
+
+==================
+Pattern tagged with struct
+==================
+
+match n | #Cons { h: x, t: y } -> x
+
+---
+
+(source_file
+  (script
+    (match
+      (variable
+        (identifier))
+      (alternative
+        (pattern_tagged
+          (identifier)
+          (pattern_struct
+            (pattern_key_value
+              (identifier)
+              (pattern_variable
+                (identifier)))
+            (pattern_key_value
+              (identifier)
+              (pattern_variable
+                (identifier)))))
+        (variable
+          (identifier))))))
+
+==================
+Pattern nested tagged
+==================
+
+match n | #Just #Some x -> x
+
+---
+
+(source_file
+  (script
+    (match
+      (variable
+        (identifier))
+      (alternative
+        (pattern_tagged
+          (identifier)
+          (pattern_tagged
+            (identifier)
+            (pattern_variable
+              (identifier))))
+        (variable
+          (identifier))))))
+
+==================
+Pattern with literal string
+==================
+
+match n | "hello" -> 0
+
+---
+
+(source_file
+  (script
+    (match
+      (variable
+        (identifier))
+      (alternative
+        (pattern_literal
+          (literal
+            (string)))
+        (literal
+          (number))))))
+
+
+==================
+Match with multiple branches
+==================
+
+match x | #Nil _ -> 0 | #Cons {h, t} -> h
+
+---
+
+(source_file
+  (script
+    (match
+      (variable
+        (identifier))
+      (alternative
+        (pattern_tagged
+          (identifier)
+          (wildcard))
+        (literal
+          (number)))
+      (alternative
+        (pattern_tagged
+          (identifier)
+          (pattern_tuple
+            (pattern_variable
+              (identifier))
+            (pattern_variable
+              (identifier))))
+        (variable
+          (identifier))))))

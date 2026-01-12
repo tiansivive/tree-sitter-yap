@@ -1,0 +1,424 @@
+==================
+Lambda with application
+==================
+
+\x -> f x
+
+---
+
+(source_file
+  (script
+    (lambda
+      (param
+        (identifier))
+      (application
+        (variable
+          (identifier))
+        (variable
+          (identifier))))))
+
+==================
+Projection with application
+==================
+
+x.y z
+
+---
+
+(source_file
+  (script
+    (application
+      (projection
+        (variable
+          (identifier))
+        (identifier))
+      (variable
+        (identifier)))))
+
+==================
+Lambda with projection
+==================
+
+\x -> x.y
+
+---
+
+(source_file
+  (script
+    (lambda
+      (param
+        (identifier))
+      (projection
+        (variable
+          (identifier))
+        (identifier)))))
+
+==================
+Lambda with projection and application
+==================
+
+\x -> x.y z
+
+---
+
+(source_file
+  (script
+    (lambda
+      (param
+        (identifier))
+      (application
+        (projection
+          (variable
+            (identifier))
+          (identifier))
+        (variable
+          (identifier))))))
+
+==================
+Lambda with chained projections
+==================
+
+\x -> x.y.z w
+
+---
+
+(source_file
+  (script
+    (lambda
+      (param
+        (identifier))
+      (application
+        (projection
+          (projection
+            (variable
+              (identifier))
+            (identifier))
+          (identifier))
+        (variable
+          (identifier))))))
+
+==================
+Annotation with pi type
+==================
+
+\x -> y : Type -> Type
+
+---
+
+(source_file
+  (script
+    (lambda
+      (param
+        (identifier))
+      (pi
+        (typed_param
+          (identifier)
+          (literal))
+        (literal)))))
+
+==================
+Pi with applications
+==================
+
+(a:Type) -> (b:Type) -> f a -> f b
+
+---
+
+(source_file
+  (script
+    (arrow
+      (parenthesized
+        (application
+          (variable
+            (identifier))
+          (variable
+            (label))))
+      (arrow
+        (parenthesized
+          (application
+            (variable
+              (identifier))
+            (variable
+              (label))))
+        (arrow
+          (application
+            (variable
+              (identifier))
+            (variable
+              (identifier)))
+          (application
+            (variable
+              (identifier))
+            (variable
+              (identifier))))))))
+
+==================
+Pi with struct
+==================
+
+(a:Type) -> (b:Type) -> { x: a, y: b }
+
+---
+
+(source_file
+  (script
+    (pi
+      (parenthesized
+        (application
+          (variable
+            (identifier))
+          (variable
+            (label))))
+      (pi
+        (parenthesized
+          (application
+            (variable
+              (identifier))
+            (variable
+              (label))))
+        (struct
+          (key_value
+            (key
+              (identifier))
+            (variable
+              (identifier)))
+          (key_value
+            (key
+              (identifier))
+            (variable
+              (identifier))))))))
+
+==================
+Multiplicative binds tighter than additive
+==================
+
+1 + 2 * 3
+
+---
+
+(source_file
+  (script
+    (operation
+      (literal
+        (number))
+      (operation
+        (literal
+          (number))
+        (literal
+          (number))))))
+
+==================
+Logical and binds tighter than or
+==================
+
+a && b || c
+
+---
+
+(source_file
+  (script
+    (operation
+      (operation
+        (variable
+          (identifier))
+        (variable
+          (identifier)))
+      (variable
+        (identifier)))))
+
+==================
+Application chaining
+==================
+
+f a b
+
+---
+
+(source_file
+  (script
+    (application
+      (application
+        (variable
+          (identifier))
+        (variable
+          (identifier)))
+      (variable
+        (identifier)))))
+
+==================
+Pipeline operation forward
+==================
+
+a |> f
+
+---
+
+(source_file
+  (script
+    (operation
+      (variable
+        (identifier))
+      (variable
+        (identifier)))))
+
+==================
+Pipeline operation backward
+==================
+
+f <| x
+
+---
+
+(source_file
+  (script
+    (operation
+      (variable
+        (identifier))
+      (variable
+        (identifier)))))
+
+==================
+Equality comparison
+==================
+
+x == y
+
+---
+
+(source_file
+  (script
+    (operation
+      (variable
+        (identifier))
+      (variable
+        (identifier)))))
+
+==================
+Less than comparison
+==================
+
+a < b
+
+---
+
+(source_file
+  (script
+    (operation
+      (variable
+        (identifier))
+      (variable
+        (identifier)))))
+
+==================
+Greater than or equal
+==================
+
+a >= b
+
+---
+
+(source_file
+  (script
+    (operation
+      (variable
+        (identifier))
+      (variable
+        (identifier)))))
+
+==================
+Chained comparisons
+==================
+
+a < b && b < c
+
+---
+
+(source_file
+  (script
+    (operation
+      (operation
+        (variable
+          (identifier))
+        (variable
+          (identifier)))
+      (operation
+        (variable
+          (identifier))
+        (variable
+          (identifier))))))
+
+==================
+Or binds looser than and
+==================
+
+a && b || c && d
+
+---
+
+(source_file
+  (script
+    (operation
+      (operation
+        (variable
+          (identifier))
+        (variable
+          (identifier)))
+      (operation
+        (variable
+          (identifier))
+        (variable
+          (identifier))))))
+
+==================
+Mixed arithmetic precedence
+==================
+
+a + b * c - d
+
+---
+
+(source_file
+  (script
+    (operation
+      (operation
+        (variable
+          (identifier))
+        (operation
+          (variable
+            (identifier))
+          (variable
+            (identifier))))
+      (variable
+        (identifier)))))
+
+==================
+Annotation binds tighter than pi
+==================
+
+a : Type -> Type
+
+---
+
+(source_file
+  (script
+    (pi
+      (typed_param
+        (identifier)
+        (literal))
+      (literal))))
+
+==================
+Implicit application with @
+==================
+
+f @ x
+
+---
+
+(source_file
+  (script
+    (application
+      (variable
+        (identifier))
+      (variable
+        (identifier)))))

@@ -7,6 +7,8 @@
 /// <reference types="tree-sitter-cli/dsl" />
 // @ts-check
 
+const IDENTIFIER_PATTERN = /[a-zA-Z_][a-zA-Z0-9_']*/;
+
 const PRECEDENCE = {
   projection: 70,  // field access, highest precedence
   application: 60,
@@ -21,16 +23,21 @@ const PRECEDENCE = {
     or: 41
   },
   types: {
-    annotation: 32,  // higher than pipelines for intermediate annotations
-    modal: 31
+    modal: {
+      multiple: 32,
+      single: 31
+    }
   },
   control: {
     pipeline: 22,
     continuations: 21  // shift, reset, resume
   },
   syntactic: {
-    arrow: 11,  // lambda, pi, mu - right-associative binding forms
-    tag: 11     // tagged constructors - right-associative
+    pi: 14,      // pi types - right-associative binding forms  
+    arrow: 13,  // lambda, pi, mu - right-associative binding forms
+    tag: 12,     // tagged constructors - right-associative
+    key: 11,
+    base: 10,
   }
 };
 
@@ -38,15 +45,21 @@ module.exports = grammar({
   name: 'yap',
 
   conflicts: $ => [
+    [$.number],
+    [$.application, $.operation],
+    // [$.type_expr, $.injection],
     [$.struct, $.block],
-    [$.variable, $.key],
-    [$.row, $.list],
-    [$.type, $.injection],
-    [$.modal_type],
-    [$.variant],
-    [$.match],
-    [$.list, $.dict],
-    [$.pattern_list, $.pattern_row]
+  
+    
+    // //[$.dict, $.list],
+    // [$.domain, $.typing],
+    // [$.domain, $.parenthesized],
+    
+    [$.pattern, $.atom],
+    [$.pattern_list, $.pattern_row],
+    [$.pattern_list, $.pattern_row, $.list],
+    [$.pattern_struct, $.struct, $.block]
+    
   ],
 
   extras: $ => [
@@ -57,7 +70,7 @@ module.exports = grammar({
   word: $ => $.identifier,
 
   supertypes: $ => [
-    $.type,
+    $.type_expr,
     $.expr,
     $.pattern,
     $.atom,
@@ -86,13 +99,13 @@ module.exports = grammar({
     // Exports
     exports: $ => choice(
       seq('export', '*', ';'),
-      seq('export', '(', commaSep($.identifier), ')', ';')
+      seq('export', '(', sep1($.identifier, ','), ')', ';')
     ),
 
     // Imports
     import: $ => choice(
       seq('import', $.string, ';'),
-      seq('import', $.string, '(', commaSep($.identifier), ')', ';')
+      seq('import', $.string, '(', sep1($.identifier, ','), ')', ';')
     ),
 
     // Statements
@@ -105,12 +118,12 @@ module.exports = grammar({
 
     letdec: $ => choice(
       seq('let', field('name', $.identifier), '=', field('value', $.expr)),
-      seq('let', field('name', $.identifier), ':', field('type', $.type), '=', field('value', $.expr))
+      seq('let', field('name', $.identifier), ':', field('type', $.expr), '=', field('value', $.expr))
     ),
 
     using: $ => seq(
       'using',
-      $.ann,
+      $.expr,
       optional(seq('as', $.identifier))
     ),
 
@@ -118,36 +131,32 @@ module.exports = grammar({
       'foreign',
       $.identifier,
       ':',
-      $.type
+      $.expr
     ),
 
+    
 
 
     // Types (unified)
-    type: $ => choice(
+    type_expr: $ => choice(
       $.pi,
+      $.arrow,
       $.mu,
       $.variant,
       $.dict,
-      $.row,
-      $.modal_type,
-      $.expr,
-      $.ann
+      $.modal,
+    ),
+    
+    modal: $ => choice(
+      prec.right(PRECEDENCE.types.modal.multiple, seq('<', $.quantity, '>', $.expr, '[|', $.lambda, '|]')),
+      prec.right(PRECEDENCE.types.modal.single, seq('<', $.quantity, '>', $.expr)),
+      prec.right(PRECEDENCE.types.modal.single, seq($.expr, '[|', $.lambda, '|]'))
     ),
 
-    // Annotations
-    ann: $ => prec.right(PRECEDENCE.types.annotation, seq($.type, ':', $.type)),
-
-    modal_type: $ => choice(
-      prec(PRECEDENCE.types.modal, seq('<', $.quantity, '>', $.type, '[|', $.lambda, '|]')),
-      prec(PRECEDENCE.types.modal, seq('<', $.quantity, '>', $.type)),
-      prec(PRECEDENCE.types.modal, seq($.type, '[|', $.lambda, '|]'))
-    ),
-
-    mu: $ => prec.right(PRECEDENCE.syntactic.arrow, seq('μ', field('name', $.identifier), '->', field('body', $.type))),
-
+    mu: $ => prec.right(PRECEDENCE.syntactic.arrow, seq('μ', field('name', $.identifier), '->', field('body', $.expr))),
     // Expressions (unified with operator precedence)
     expr: $ => choice(
+      $.type_expr,
       $.lambda,
       $.match,
       $.block,
@@ -156,13 +165,17 @@ module.exports = grammar({
       $.resume,
       $.operation,
       $.application,
-      $.atom
+      $.annotation,
+      $.atom,
     ),
+
+            // Annotations
+    annotation: $ => prec.right(PRECEDENCE.syntactic.base, seq($.expr, ':', $.expr)),
 
     // Application (highest precedence)
     application: $ => choice(
-      prec.left(PRECEDENCE.application, seq(field('function', $.expr), field('argument', $.atom))),
-      prec.left(PRECEDENCE.application, seq(field('function', $.expr), '@', field('argument', $.atom)))
+      prec.left(PRECEDENCE.application, seq(field('function', $.expr), field('argument', $.expr))),
+      prec.left(PRECEDENCE.application, seq(field('function', $.expr), alias('@', $.implicit_application), field('argument', $.expr)))
     ),
 
     // Operation (lower precedence than application)
@@ -185,21 +198,25 @@ module.exports = grammar({
       $.tuple,
       $.projection,
       $.injection,
+      $.row,
       $.list,
       $.tagged,
       $.parenthesized
     ),
 
-    parenthesized: $ => seq('(', $.type, ')'),
+    parenthesized: $ => parens($.expr),
+    
 
     variable: $ => choice(
       $.identifier,
       $.label
     ),
 
-    hole: $ => '_',
+    hole: $ => '?',
 
-    label: $ => seq(':', $.identifier),
+    // Identifiers
+    identifier: $ => IDENTIFIER_PATTERN,
+    label: $ => token(new RegExp(":" + IDENTIFIER_PATTERN.source)),
 
     // Literals
     literal: $ => choice(
@@ -208,71 +225,92 @@ module.exports = grammar({
       $.boolean,
       'Type',
       'Unit',
+      'Row',
       '!',
-      'Row'
     ),
 
     string: $ => /"(?:\\["bfnrt\/\\]|\\u[a-fA-F0-9]{4}|[^"\\])*"/,
 
-    number: $ => token(choice(
-      seq(/[0-9]+/, '.', /[0-9]+/),
-      /[0-9]+/
-    )),
+    _digits: $ => token(/[0-9]+/),
+    number: $ => choice(
+      prec.right(1, seq(optional('-'), $._digits, '.', $._digits)),
+      seq(optional('-'), $._digits)
+    ),
 
     boolean: $ => choice('true', 'false'),
 
+        // Pi types (right-associative, domain must be (identifier: type))
+    pi: $ => choice(
+      prec.right(PRECEDENCE.syntactic.pi, seq(field('domain', parens(sep1($.typing, ","))), alias('->', $.explicit_arrow), field('codomain', $.expr))),
+      prec.right(PRECEDENCE.syntactic.pi, seq(field('domain', parens(sep1($.typing, ","))), alias('=>', $.implicit_arrow), field('codomain', $.expr)))
+    ),
+
+    // Simple arrow types (right-associative)
+    arrow: $ => choice(
+      prec.right(PRECEDENCE.syntactic.arrow, seq(field('domain', parens(sep1($.expr, ","))), alias('->', $.explicit_arrow), field('codomain', $.expr))),
+      prec.right(PRECEDENCE.syntactic.arrow, seq(field('domain', $.expr), alias('->', $.explicit_arrow), field('codomain', $.expr))),
+      prec.right(PRECEDENCE.syntactic.arrow, seq(field('domain', parens(sep1($.expr, ","))), alias('=>', $.implicit_arrow), field('codomain', $.expr))),
+      prec.right(PRECEDENCE.syntactic.arrow, seq(field('domain', $.expr), alias('=>', $.implicit_arrow), field('codomain', $.expr)))
+    ),
+
+    // domain: $ => prec.right(1, choice(
+    //   $.typing,
+    //   $.expr
+    // )),
+
     // Lambda
     lambda: $ => prec.right(PRECEDENCE.syntactic.arrow, choice(
-      seq('\\', field('params', repeat1($.param)), '->', field('body', $.type)),
-      seq('\\', field('params', repeat1($.param)), '=>', field('body', $.type))
-    )),
+      seq('\\', field('params', $.params), alias('->', $.explicit_arrow), field('body', $.expr)),
+      seq('\\', field('params', $.params), alias('=>', $.implicit_arrow), field('body', $.expr))
+    )), 
+
+    params: $ => choice(
+      repeat1($.param),
+      parens(sep1($.param, ','))
+    ),
 
     param: $ => choice(
       $.identifier,
-      seq('(', $.typed_param, ')')
+     parens($.typing)
     ),
 
-    typed_param: $ => seq($.identifier, ':', $.type),
+    typing: $ => prec.right(PRECEDENCE.syntactic.base, seq($.identifier, ':', $.expr)),
 
-    // Pi types (right-associative)
-    pi: $ => choice(
-      prec.right(PRECEDENCE.syntactic.arrow, seq(field('domain', $.type), '->', field('codomain', $.type))),
-      prec.right(PRECEDENCE.syntactic.arrow, seq(field('domain', $.type), '=>', field('codomain', $.type)))
-    ),
 
     // Row terms
-    row: $ => seq('[', commaSep($.key_value), optional(seq('|', $.identifier)), ']'),
+    row: $ => seq('[', sep1($.key_value, ','), optional(field("tail", seq('|', $.identifier))), ']'),
 
-    key_value: $ => seq($.key, ':', $.type),
+    // Redefine key_value to have higher precedence over plain expressions
+    key_value: $ => prec.right(PRECEDENCE.syntactic.base, seq($.key, ':', $.expr)),
+    key: $ => prec.right(PRECEDENCE.syntactic.key, choice(
+      alias($.identifier, $.field),
+      alias($._digits, $.index)
+    )),
 
-    key: $ => choice(
-      $.identifier,
-      /[0-9]+/
-    ),
-
+    //index: $ => token(/[0-9]+/),
+    
     // Struct
     struct: $ => choice(
       seq('{', '}'),
-      seq('{', commaSep($.key_value), optional(seq('|', $.identifier)), '}')
+      seq('{', sep1($.key_value, ','), optional(field("tail", seq('|', $.identifier))), '}')
     ),
-
     // Tuple
-    tuple: $ => seq('{', commaSep1($.type), optional(seq('|', $.identifier)), '}'),
-
+    tuple: $ => seq('{', sep1($.expr, ','), optional(field("tail", seq('|', $.identifier))), '}'),
+    
     // List
     list: $ => choice(
       seq('[', ']'),
-      seq('[', commaSep1($.type), optional(seq('|', $.identifier)), ']')
+      seq('[', sep1($.expr, ','), optional(field("tail", seq('|', $.identifier))), ']')
     ),
 
     // Variant
-    variant: $ => seq('|', sep1($.tagged, '|')),
+    variant: $ => prec.right(PRECEDENCE.syntactic.base, seq('|', sep1($.tagged, '|'))),
 
     // Tagged
-    tagged: $ => prec.right(PRECEDENCE.syntactic.tag, seq('#', field('tag', $.identifier), field('payload', $.type))),
+    tagged: $ => prec.right(PRECEDENCE.syntactic.tag, seq('#', field('tag', $.identifier), field('payload', $.expr))),
 
     // Dict
-    dict: $ => seq('{', '[', $.type, ']', ':', $.type, '}'),
+    dict: $ => prec.right(PRECEDENCE.syntactic.base, seq('{', '[', $.expr, ']', ':', $.expr, '}')),
 
     // Projection
     projection: $ => choice(
@@ -282,11 +320,11 @@ module.exports = grammar({
 
     // Injection
     injection: $ => choice(
-      seq('{', field('record', $.expr), '|', field('updates', commaSep($.assignment)), '}'),
-      seq('{', '|', field('updates', commaSep($.assignment)), '}')
+      seq('{', field('record', $.expr), '|', field('updates', sep1($.assignment, ',')), '}'),
+      seq('{', '|', field('updates', sep1($.assignment, ',')), '}')
     ),
 
-    assignment: $ => seq(field('key', $.identifier), '=', field('value', $.type)),
+    assignment: $ => seq(field('key', $.identifier), '=', field('value', $.expr)),
 
     // Block
     block: $ => choice(
@@ -294,16 +332,16 @@ module.exports = grammar({
       seq('{', field('return', $.return_statement), '}')
     ),
 
-    return_statement: $ => seq('return', field('value', $.ann), ';'),
+    return_statement: $ => seq('return', field('value', $.expr), ';'),
 
     // Pattern matching
-    match: $ => seq('match', field('subject', $.type), repeat1(field('branch', $.alternative))),
+    match: $ => prec.right(PRECEDENCE.syntactic.base, seq('match', field('subject', $.expr), repeat1(field('branch', $.alternative)))),
 
-    alternative: $ => seq('|', field('pattern', $.pattern), '->', field('body', $.type)),
+    alternative: $ => prec.right(seq('|', field('pattern', $.pattern), '->', field('body', $.expr))),
 
     pattern: $ => choice(
-      $.pattern_variable,
-      $.pattern_literal,
+      $.variable,
+      $.literal,
       $.pattern_tagged,
       $.pattern_struct,
       $.pattern_tuple,
@@ -312,22 +350,19 @@ module.exports = grammar({
       $.wildcard
     ),
 
-    pattern_variable: $ => $.identifier,
-
-    pattern_literal: $ => $.literal,
 
     pattern_tagged: $ => prec.right(PRECEDENCE.syntactic.tag, seq('#', field('tag', $.identifier), field('payload', $.pattern))),
 
     pattern_struct: $ => choice(
-      seq('{', '}'),
-      seq('{', commaSep($.pattern_key_value), optional(seq('|', $.identifier)), '}')
+      seq('{', optional(seq('|', $.identifier)),'}'),
+      seq('{', sep1($.pattern_key_value, ','), optional(seq('|', $.identifier)), '}')
     ),
 
-    pattern_tuple: $ => seq('{', commaSep1($.pattern), optional(seq('|', $.identifier)), '}'),
+    pattern_tuple: $ => seq('{', sep1($.pattern, ','), optional(seq('|', $.identifier)), '}'),
 
     pattern_list: $ => choice(
       seq('[', ']'),
-      seq('[', commaSep1($.pattern), optional(seq('|', $.identifier)), ']')
+      seq('[', sep1($.pattern, ','), optional(seq('|', $.identifier)), ']')
     ),
 
     pattern_row: $ => seq('[', commaSep($.pattern_key_value), optional(seq('|', $.identifier)), ']'),
@@ -337,17 +372,19 @@ module.exports = grammar({
     wildcard: $ => '_',
 
     // Delimited continuations (right-associative)
-    reset: $ => prec.right(PRECEDENCE.control.continuations, seq('reset', $.type)),
+    reset: $ => prec.right(PRECEDENCE.control.continuations, seq('reset', $.expr)),
 
-    shift: $ => prec.right(PRECEDENCE.control.continuations, seq('shift', $.type)),
+    shift: $ => prec.right(PRECEDENCE.control.continuations, seq('shift', $.expr)),
 
-    resume: $ => prec.right(PRECEDENCE.control.continuations, seq('resume', $.type)),
-
+    resume: $ => prec.right(PRECEDENCE.control.continuations, seq('resume', $.expr)),
     // Modalities
     quantity: $ => choice('0', '1', '*'),
 
-    // Identifiers
-    identifier: $ => /[a-zA-Z][a-zA-Z0-9]*/,
+
+
+    
+
+
 
     comment: $ => token(choice(
       seq('//', /.*/),
@@ -367,19 +404,20 @@ function sep1(rule, separator) {
 }
 
 /**
- * Creates a rule to match one or more of the rules separated by a comma
- * @param {Rule} rule
- * @return {SeqRule}
- */
-function commaSep1(rule) {
-  return seq(rule, repeat(seq(',', rule)));
-}
-
-/**
  * Creates a rule to optionally match one or more of the rules separated by a comma
  * @param {Rule} rule
  * @return {ChoiceRule}
  */
 function commaSep(rule) {
-  return optional(commaSep1(rule));
+  return optional(sep1(rule, ','));
 }
+
+/**
+ * 
+ * @param {Rule} rule 
+ * @returns {SeqRule}
+ */
+function parens(rule) {
+  return seq('(', rule, ')');
+}
+
