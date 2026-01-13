@@ -80,52 +80,58 @@ Block with typed let
           (identifier))))))
 
 ==================
-Using statement
+Block with complex expressions
 ==================
 
-using x : Type
+{ let f = \x -> x + 1; return f 5 : Int; }
 
 ---
 
 (source_file
   (script
-    (using
-      (ann
-        (variable
-          (identifier))
-        (literal)))))
+    (block
+      (letdec
+        (identifier)
+        (lambda
+          (params
+            (param
+              (identifier)))
+          (explicit_arrow)
+          (operation
+            (variable
+              (identifier))
+            (literal
+              (number)))))
+      (return_statement
+        (annotation
+          (application
+            (variable
+              (identifier))
+            (literal
+              (number)))
+          (variable
+            (identifier)))))))
 
 ==================
-Using with alias
+Nested blocks
 ==================
 
-using x : Type as myX
+{ return { return x : Type; } : Type; }
 
 ---
 
 (source_file
   (script
-    (using
-      (ann
-        (variable
-          (identifier))
-        (literal))
-      (identifier))))
-
-==================
-Foreign declaration
-==================
-
-foreign primAdd : Int
-
----
-
-(source_file
-  (script
-    (foreign
-      (identifier)
-      (variable
-        (identifier)))))
+    (block
+      (return_statement
+        (annotation
+          (block
+            (return_statement
+              (annotation
+                (variable
+                  (identifier))
+                (literal))))
+          (literal))))))
 
 ==================
 Multiple statements
@@ -147,58 +153,6 @@ let x = 1; let y = 2; x
         (number)))
     (variable
       (identifier))))
-
-==================
-Block with complex expressions
-==================
-
-{ let f = \x -> x + 1; return f 5 : Int; }
-
----
-
-(source_file
-  (script
-    (block
-      (letdec
-        (identifier)
-        (lambda
-          (param
-            (identifier))
-          (operation
-            (variable
-              (identifier))
-            (literal
-              (number)))))
-      (return_statement
-        (ann
-          (application
-            (variable
-              (identifier))
-            (literal
-              (number)))
-          (variable
-            (identifier)))))))
-
-==================
-Nested blocks
-==================
-
-{ return { return x : Type; } : Type; }
-
----
-
-(source_file
-  (script
-    (block
-      (return_statement
-        (ann
-          (block
-            (return_statement
-              (ann
-                (variable
-                  (identifier))
-                (literal))))
-          (literal))))))
 
 ==================
 Let with application
@@ -236,12 +190,12 @@ let r = { x: 1, y: 2 }
       (struct
         (key_value
           (key
-            (identifier))
+            (field))
           (literal
             (number)))
         (key_value
           (key
-            (identifier))
+            (field))
           (literal
             (number)))))))
 
@@ -249,23 +203,71 @@ let r = { x: 1, y: 2 }
 Statement with return type annotation
 ==================
 
-return f x : Int -> String;
+{ return f x : Int -> String; }
 
 ---
 
 (source_file
   (script
-    (arrow
-      (ann
-        (application
+    (block
+      (return_statement
+        (annotation
           (application
             (variable
               (identifier))
             (variable
               (identifier)))
-          (variable
-            (identifier)))
+          (arrow
+            (variable
+              (identifier))
+            (explicit_arrow)
+            (variable
+              (identifier))))))))
+
+==================
+Using statement
+==================
+
+using x : Type
+
+---
+
+(source_file
+  (script
+    (using
+      (annotation
         (variable
-          (identifier)))
+          (identifier))
+        (literal)))))
+
+==================
+Using with alias
+==================
+
+using x : Type as myX
+
+---
+
+(source_file
+  (script
+    (using
+      (annotation
+        (variable
+          (identifier))
+        (literal))
+      (identifier))))
+
+==================
+Foreign declaration
+==================
+
+foreign primAdd : Int
+
+---
+
+(source_file
+  (script
+    (foreign
+      (identifier)
       (variable
         (identifier)))))

@@ -58,6 +58,25 @@ reset f x
           (identifier))))))
 
 ==================
+Reset with lambda
+==================
+
+reset \x -> x
+
+---
+
+(source_file
+  (script
+    (reset
+      (lambda
+        (params
+          (param
+            (identifier)))
+        (explicit_arrow)
+        (variable
+          (identifier))))))
+
+==================
 Shift with injection
 ==================
 
@@ -77,37 +96,23 @@ shift { x | y = 1 }
             (number)))))))
 
 ==================
-Reset with lambda
+Reset in lambda body
 ==================
 
-reset \x -> x
+\x -> reset y
 
 ---
 
 (source_file
   (script
-    (reset
-      (lambda
+    (lambda
+      (params
         (param
-          (identifier))
+          (identifier)))
+      (explicit_arrow)
+      (reset
         (variable
           (identifier))))))
-
-==================
-Nested reset-shift
-==================
-
-reset shift x
-
----
-
-(source_file
-  (script
-    (reset
-      (shift
-        (variable
-          (identifier))))))
-
 
 ==================
 Shift in application context
@@ -128,19 +133,17 @@ f (shift x)
             (identifier)))))))
 
 ==================
-Reset in lambda body
+Nested reset-shift
 ==================
 
-\x -> reset y
+reset shift x
 
 ---
 
 (source_file
   (script
-    (lambda
-      (param
-        (identifier))
-      (reset
+    (reset
+      (shift
         (variable
           (identifier))))))
 
@@ -159,3 +162,4 @@ reset shift resume x
         (resume
           (variable
             (identifier)))))))
+

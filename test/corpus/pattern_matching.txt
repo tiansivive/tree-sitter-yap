@@ -17,28 +17,6 @@ match x | _ -> y
           (identifier))))))
 
 ==================
-Match with tagged pattern
-==================
-
-match x | #Cons h -> h
-
----
-
-(source_file
-  (script
-    (match
-      (variable
-        (identifier))
-      (alternative
-        (pattern_tagged
-          (identifier)
-          (pattern_variable
-            (identifier)))
-        (variable
-          (identifier))))))
-
-
-==================
 Pattern variable
 ==================
 
@@ -52,7 +30,7 @@ match n | x -> x
       (variable
         (identifier))
       (alternative
-        (pattern_variable
+        (variable
           (identifier))
         (variable
           (identifier))))))
@@ -71,9 +49,27 @@ match n | 42 -> 0
       (variable
         (identifier))
       (alternative
-        (pattern_literal
-          (literal
-            (number)))
+        (literal
+          (number))
+        (literal
+          (number))))))
+
+==================
+Pattern with literal string
+==================
+
+match n | "hello" -> 0
+
+---
+
+(source_file
+  (script
+    (match
+      (variable
+        (identifier))
+      (alternative
+        (literal
+          (string))
         (literal
           (number))))))
 
@@ -112,11 +108,11 @@ match n | { x: a, y: b } -> x
         (pattern_struct
           (pattern_key_value
             (identifier)
-            (pattern_variable
+            (variable
               (identifier)))
           (pattern_key_value
             (identifier)
-            (pattern_variable
+            (variable
               (identifier))))
         (variable
           (identifier))))))
@@ -136,9 +132,9 @@ match n | { a, b } -> a
         (identifier))
       (alternative
         (pattern_tuple
-          (pattern_variable
+          (variable
             (identifier))
-          (pattern_variable
+          (variable
             (identifier)))
         (variable
           (identifier))))))
@@ -158,11 +154,11 @@ match n | [a, b, c] -> a
         (identifier))
       (alternative
         (pattern_list
-          (pattern_variable
+          (variable
             (identifier))
-          (pattern_variable
+          (variable
             (identifier))
-          (pattern_variable
+          (variable
             (identifier)))
         (variable
           (identifier))))))
@@ -184,11 +180,11 @@ match n | [x: a, y: b] -> x
         (pattern_row
           (pattern_key_value
             (identifier)
-            (pattern_variable
+            (variable
               (identifier)))
           (pattern_key_value
             (identifier)
-            (pattern_variable
+            (variable
               (identifier))))
         (variable
           (identifier))))))
@@ -209,7 +205,28 @@ match n | #Some x -> x
       (alternative
         (pattern_tagged
           (identifier)
-          (pattern_variable
+          (variable
+            (identifier)))
+        (variable
+          (identifier))))))
+
+==================
+Match with tagged pattern
+==================
+
+match x | #Cons h -> h
+
+---
+
+(source_file
+  (script
+    (match
+      (variable
+        (identifier))
+      (alternative
+        (pattern_tagged
+          (identifier)
+          (variable
             (identifier)))
         (variable
           (identifier))))))
@@ -233,11 +250,11 @@ match n | #Cons { h: x, t: y } -> x
           (pattern_struct
             (pattern_key_value
               (identifier)
-              (pattern_variable
+              (variable
                 (identifier)))
             (pattern_key_value
               (identifier)
-              (pattern_variable
+              (variable
                 (identifier)))))
         (variable
           (identifier))))))
@@ -260,31 +277,10 @@ match n | #Just #Some x -> x
           (identifier)
           (pattern_tagged
             (identifier)
-            (pattern_variable
+            (variable
               (identifier))))
         (variable
           (identifier))))))
-
-==================
-Pattern with literal string
-==================
-
-match n | "hello" -> 0
-
----
-
-(source_file
-  (script
-    (match
-      (variable
-        (identifier))
-      (alternative
-        (pattern_literal
-          (literal
-            (string)))
-        (literal
-          (number))))))
-
 
 ==================
 Match with multiple branches
@@ -309,9 +305,9 @@ match x | #Nil _ -> 0 | #Cons {h, t} -> h
         (pattern_tagged
           (identifier)
           (pattern_tuple
-            (pattern_variable
+            (variable
               (identifier))
-            (pattern_variable
+            (variable
               (identifier))))
         (variable
           (identifier))))))

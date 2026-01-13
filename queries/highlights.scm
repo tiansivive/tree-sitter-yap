@@ -64,6 +64,8 @@
 ")" @punctuation.bracket
 "<" @punctuation.bracket
 ">" @punctuation.bracket
+"[|" @punctuation.bracket
+"|]" @punctuation.bracket
 
 ;; Tagged constructors
 (tagged

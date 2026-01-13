@@ -10,8 +10,7 @@
 const IDENTIFIER_PATTERN = /[a-zA-Z_][a-zA-Z0-9_']*/;
 
 const PRECEDENCE = {
-  projection: 70,  // field access, highest precedence
-  application: 60,
+
   arithmetic: {
     multiplicative: 54,
     additive: 53,
@@ -33,9 +32,14 @@ const PRECEDENCE = {
     continuations: 21  // shift, reset, resume
   },
   syntactic: {
-    pi: 14,      // pi types - right-associative binding forms  
-    arrow: 13,  // lambda, pi, mu - right-associative binding forms
-    tag: 12,     // tagged constructors - right-associative
+    field: 80,
+    injection: 71,    // record update
+    projection: 70,   // field access, highest precedence
+    tail: 62,         // row/struct/list tail
+    unary: 61,        // unary prefix operators
+    application: 60,
+    arrow: 13,        // arrow, pi, lambda, mu - right-associative binding forms
+    tag: 12,          // tagged constructors - right-associative
     key: 11,
     base: 10,
   }
@@ -45,21 +49,8 @@ module.exports = grammar({
   name: 'yap',
 
   conflicts: $ => [
-    [$.number],
-    [$.application, $.operation],
-    // [$.type_expr, $.injection],
     [$.struct, $.block],
-  
-    
-    // //[$.dict, $.list],
-    // [$.domain, $.typing],
-    // [$.domain, $.parenthesized],
-    
-    [$.pattern, $.atom],
     [$.pattern_list, $.pattern_row],
-    [$.pattern_list, $.pattern_row, $.list],
-    [$.pattern_struct, $.struct, $.block]
-    
   ],
 
   extras: $ => [
@@ -160,9 +151,7 @@ module.exports = grammar({
       $.lambda,
       $.match,
       $.block,
-      $.reset,
-      $.shift,
-      $.resume,
+      $.unary,
       $.operation,
       $.application,
       $.annotation,
@@ -172,10 +161,13 @@ module.exports = grammar({
             // Annotations
     annotation: $ => prec.right(PRECEDENCE.syntactic.base, seq($.expr, ':', $.expr)),
 
+    // Unary operations (prefix)
+    unary: $ => prec.right(PRECEDENCE.syntactic.unary, seq(choice('-', '+'), $.expr)),
+
     // Application (highest precedence)
     application: $ => choice(
-      prec.left(PRECEDENCE.application, seq(field('function', $.expr), field('argument', $.expr))),
-      prec.left(PRECEDENCE.application, seq(field('function', $.expr), alias('@', $.implicit_application), field('argument', $.expr)))
+      prec.left(PRECEDENCE.syntactic.application, seq(field('function', $.expr), field('argument', $.atom))),
+      prec.left(PRECEDENCE.syntactic.application, seq(field('function', $.expr), alias('@', $.implicit_application), field('argument', $.atom)))
     ),
 
     // Operation (lower precedence than application)
@@ -201,6 +193,9 @@ module.exports = grammar({
       $.row,
       $.list,
       $.tagged,
+      $.reset,
+      $.shift,
+      $.resume,
       $.parenthesized
     ),
 
@@ -233,16 +228,16 @@ module.exports = grammar({
 
     _digits: $ => token(/[0-9]+/),
     number: $ => choice(
-      prec.right(1, seq(optional('-'), $._digits, '.', $._digits)),
-      seq(optional('-'), $._digits)
+      prec.right(1, seq($._digits, '.', $._digits)),
+      $._digits
     ),
 
     boolean: $ => choice('true', 'false'),
 
         // Pi types (right-associative, domain must be (identifier: type))
     pi: $ => choice(
-      prec.right(PRECEDENCE.syntactic.pi, seq(field('domain', parens(sep1($.typing, ","))), alias('->', $.explicit_arrow), field('codomain', $.expr))),
-      prec.right(PRECEDENCE.syntactic.pi, seq(field('domain', parens(sep1($.typing, ","))), alias('=>', $.implicit_arrow), field('codomain', $.expr)))
+      prec.right(PRECEDENCE.syntactic.arrow, seq(field('domain', parens(sep1($.typing, ","))), alias('->', $.explicit_arrow), field('codomain', $.expr))),
+      prec.right(PRECEDENCE.syntactic.arrow, seq(field('domain', parens(sep1($.typing, ","))), alias('=>', $.implicit_arrow), field('codomain', $.expr)))
     ),
 
     // Simple arrow types (right-associative)
@@ -259,7 +254,7 @@ module.exports = grammar({
     // )),
 
     // Lambda
-    lambda: $ => prec.right(PRECEDENCE.syntactic.arrow, choice(
+    lambda: $ => prec.right(choice(
       seq('\\', field('params', $.params), alias('->', $.explicit_arrow), field('body', $.expr)),
       seq('\\', field('params', $.params), alias('=>', $.implicit_arrow), field('body', $.expr))
     )), 
@@ -278,10 +273,10 @@ module.exports = grammar({
 
 
     // Row terms
-    row: $ => seq('[', sep1($.key_value, ','), prec.right(PRECEDENCE.syntactic.base, optional(field("tail", seq('|', $.identifier)))), ']'),
+    row: $ => seq('[', sep1($.key_value, ','), prec.right(PRECEDENCE.syntactic.tail, optional(field("tail", seq('|', $.identifier)))), ']'),
 
     // Redefine key_value to have higher precedence over plain expressions
-    key_value: $ => prec.right(PRECEDENCE.syntactic.base, seq($.key, ':', $.expr)),
+    key_value: $ => prec.right(PRECEDENCE.syntactic.field, seq($.key, ':', $.expr)),
     key: $ => prec.right(PRECEDENCE.syntactic.key, choice(
       alias($.identifier, $.field),
       alias($._digits, $.index)
@@ -292,15 +287,15 @@ module.exports = grammar({
     // Struct
     struct: $ => choice(
       seq('{', '}'),
-      seq('{', sep1($.key_value, ','), prec.right(PRECEDENCE.syntactic.base, optional(field("tail", seq('|', $.identifier)))), '}')
+      seq('{', sep1($.key_value, ','), prec.right(PRECEDENCE.syntactic.tail, optional(field("tail", seq('|', $.identifier)))), '}')
     ),
     // Tuple
-    tuple: $ => seq('{', sep1($.expr, ','), prec.right(PRECEDENCE.syntactic.base, optional(field("tail", seq('|', $.identifier)))), '}'),
+    tuple: $ => seq('{', sep1($.expr, ','), prec.right(PRECEDENCE.syntactic.tail, optional(field("tail", seq('|', $.identifier)))), '}'),
     
     // List
     list: $ => choice(
       seq('[', ']'),
-      seq('[', sep1($.expr, ','), prec.right(PRECEDENCE.syntactic.base, optional(field("tail", seq('|', $.identifier)))), ']')
+      seq('[', sep1($.expr, ','), prec.right(PRECEDENCE.syntactic.tail, optional(field("tail", seq('|', $.identifier)))), ']')
     ),
 
     // Variant
@@ -314,14 +309,14 @@ module.exports = grammar({
 
     // Projection
     projection: $ => choice(
-      prec.left(PRECEDENCE.projection, seq(field('record', $.atom), '.', field('key', $.identifier))),
+      prec.left(PRECEDENCE.syntactic.projection, seq(field('record', $.atom), '.', field('key', $.identifier))),
       seq('.', field('key', $.identifier))
     ),
 
     // Injection
     injection: $ => choice(
-      seq('{', field('record', $.expr), '|', field('updates', sep1($.assignment, ',')), '}'),
-      seq('{', '|', field('updates', sep1($.assignment, ',')), '}')
+      prec.right(PRECEDENCE.syntactic.injection, seq('{', field('record', $.expr), '|', field('updates', sep1($.assignment, ',')), '}')),
+      prec.right(PRECEDENCE.syntactic.injection, seq('{', '|', field('updates', sep1($.assignment, ',')), '}'))
     ),
 
     assignment: $ => seq(field('key', $.identifier), '=', field('value', $.expr)),

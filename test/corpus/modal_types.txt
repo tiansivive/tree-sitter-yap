@@ -1,42 +1,17 @@
-
 ==================
-Modal type with quantity and refinement
+Modal type without refinement
 ==================
 
-<*> Type [| \x -> x |]
+<1> String
 
 ---
 
 (source_file
   (script
-    (modal_type
-      (quantity)
-      (literal)
-      (lambda
-        (param
-          (identifier))
-        (variable
-          (identifier))))))
-
-==================
-Modal type with 1 quantity
-==================
-
-<1> Int [| \x -> x |]
-
----
-
-(source_file
-  (script
-    (modal_type
+    (modal
       (quantity)
       (variable
-        (identifier))
-      (lambda
-        (param
-          (identifier))
-        (variable
-          (identifier))))))
+        (identifier)))))
 
 ==================
 Modal type with 0 quantity
@@ -48,24 +23,9 @@ Modal type with 0 quantity
 
 (source_file
   (script
-    (modal_type
+    (modal
       (quantity)
       (literal))))
-
-==================
-Modal type without refinement
-==================
-
-<1> String
-
----
-
-(source_file
-  (script
-    (modal_type
-      (quantity)
-      (variable
-        (identifier)))))
 
 ==================
 Modal type with * quantity
@@ -77,7 +37,7 @@ Modal type with * quantity
 
 (source_file
   (script
-    (modal_type
+    (modal
       (quantity)
       (literal))))
 
@@ -91,13 +51,58 @@ Type [| \x -> true |]
 
 (source_file
   (script
-    (modal_type
+    (modal
       (literal)
       (lambda
-        (param
-          (identifier))
+        (params
+          (param
+            (identifier)))
+        (explicit_arrow)
         (literal
           (boolean))))))
+
+==================
+Modal type with 1 quantity
+==================
+
+<1> Int [| \x -> x |]
+
+---
+
+(source_file
+  (script
+    (modal
+      (quantity)
+      (variable
+        (identifier))
+      (lambda
+        (params
+          (param
+            (identifier)))
+        (explicit_arrow)
+        (variable
+          (identifier))))))
+
+==================
+Modal type with quantity and refinement
+==================
+
+<*> Type [| \x -> x |]
+
+---
+
+(source_file
+  (script
+    (modal
+      (quantity)
+      (literal)
+      (lambda
+        (params
+          (param
+            (identifier)))
+        (explicit_arrow)
+        (variable
+          (identifier))))))
 
 ==================
 Modal with complex refinement
@@ -109,13 +114,15 @@ Modal with complex refinement
 
 (source_file
   (script
-    (modal_type
+    (modal
       (quantity)
       (variable
         (identifier))
       (lambda
-        (param
-          (identifier))
+        (params
+          (param
+            (identifier)))
+        (explicit_arrow)
         (operation
           (variable
             (identifier))

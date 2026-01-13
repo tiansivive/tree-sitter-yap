@@ -9,8 +9,10 @@ Lambda with single param
 (source_file
   (script
     (lambda
-      (param
-        (identifier))
+      (params
+        (param
+          (identifier)))
+      (explicit_arrow)
       (variable
         (identifier)))))
 
@@ -25,12 +27,14 @@ Lambda with multiple params
 (source_file
   (script
     (lambda
-      (param
-        (identifier))
-      (param
-        (identifier))
-      (param
-        (identifier))
+      (params
+        (param
+          (identifier))
+        (param
+          (identifier))
+        (param
+          (identifier)))
+      (explicit_arrow)
       (application
         (application
           (application
@@ -54,11 +58,13 @@ Lambda with typed param
 (source_file
   (script
     (lambda
-      (param
-        (typed_param
-          (identifier)
-          (variable
-            (identifier))))
+      (params
+        (param
+          (typing
+            (identifier)
+            (variable
+              (identifier)))))
+      (explicit_arrow)
       (variable
         (identifier)))))
 
@@ -73,16 +79,18 @@ Lambda with multiple typed params
 (source_file
   (script
     (lambda
-      (param
-        (typed_param
-          (identifier)
-          (variable
-            (identifier))))
-      (param
-        (typed_param
-          (identifier)
-          (variable
-            (identifier))))
+      (params
+        (param
+          (typing
+            (identifier)
+            (variable
+              (identifier))))
+        (param
+          (typing
+            (identifier)
+            (variable
+              (identifier)))))
+      (explicit_arrow)
       (variable
         (identifier)))))
 
@@ -97,14 +105,86 @@ Lambda with mixed params
 (source_file
   (script
     (lambda
-      (param
-        (identifier))
-      (param
-        (typed_param
-          (identifier)
-          (variable
-            (identifier))))
+      (params
+        (param
+          (identifier))
+        (param
+          (typing
+            (identifier)
+            (variable
+              (identifier)))))
+      (explicit_arrow)
       (variable
+        (identifier)))))
+
+==================
+Lambda with fat arrow
+==================
+
+\x => x
+
+---
+
+(source_file
+  (script
+    (lambda
+      (params
+        (param
+          (identifier)))
+      (implicit_arrow)
+      (variable
+        (identifier)))))
+
+==================
+Lambda body with projection and application
+==================
+
+\x y -> x.f y
+
+---
+
+(source_file
+  (script
+    (lambda
+      (params
+        (param
+          (identifier))
+        (param
+          (identifier)))
+      (explicit_arrow)
+      (application
+        (projection
+          (variable
+            (identifier))
+          (identifier))
+        (variable
+          (identifier))))))
+
+==================
+Lambda with record type
+==================
+
+\(x: { foo: int }) -> x.a
+
+---
+
+(source_file
+  (script
+    (lambda
+      (params
+        (param
+          (typing
+            (identifier)
+            (struct
+              (key_value
+                (key
+                  (field))
+                (variable
+                  (identifier)))))))
+      (explicit_arrow)
+      (projection
+        (variable
+          (identifier))
         (identifier)))))
 
 ==================
@@ -120,6 +200,7 @@ Int -> String
     (arrow
       (variable
         (identifier))
+      (explicit_arrow)
       (variable
         (identifier)))))
 
@@ -136,47 +217,13 @@ Int -> String -> Bool
     (arrow
       (variable
         (identifier))
+      (explicit_arrow)
       (arrow
         (variable
           (identifier))
+        (explicit_arrow)
         (variable
           (identifier))))))
-
-==================
-Dependent pi type
-==================
-
-(x:Int) -> Int
-
----
-
-(source_file
-  (script
-    (arrow
-      (parenthesized
-        (application
-          (variable
-            (identifier))
-          (variable
-            (label))))
-      (variable
-        (identifier)))))
-
-==================
-Lambda with fat arrow
-==================
-
-\x => x
-
----
-
-(source_file
-  (script
-    (lambda
-      (param
-        (identifier))
-      (variable
-        (identifier)))))
 
 ==================
 Pi with fat arrow
@@ -191,8 +238,62 @@ Int => String
     (arrow
       (variable
         (identifier))
+      (implicit_arrow)
       (variable
         (identifier)))))
+
+==================
+Dependent pi type
+==================
+
+(x: Int) -> Int
+
+---
+
+(source_file
+  (script
+    (pi
+      (typing
+        (identifier)
+        (variable
+          (identifier)))
+      (explicit_arrow)
+      (variable
+        (identifier)))))
+
+==================
+Parenthesized type
+==================
+
+(Int)
+
+---
+
+(source_file
+  (script
+    (parenthesized
+      (variable
+        (identifier)))))
+
+==================
+Parenthesized complex type
+==================
+
+((a: Int) -> String)
+
+---
+
+(source_file
+  (script
+    (parenthesized
+      (pi
+        (typing
+          (identifier)
+          (variable
+            (identifier)))
+        (explicit_arrow)
+        (variable
+          (identifier))))))
 
 ==================
 Mu type
@@ -217,86 +318,3 @@ Mu type
                   (identifier))
                 (variable
                   (identifier))))))))))
-
-==================
-Parenthesized type
-==================
-
-(Int)
-
----
-
-(source_file
-  (script
-    (parenthesized
-      (variable
-        (identifier)))))
-
-==================
-Parenthesized complex type
-==================
-
-((a:Int) -> String)
-
----
-
-(source_file
-  (script
-    (parenthesized
-      (arrow
-        (parenthesized
-          (application
-            (variable
-              (identifier))
-            (variable
-              (label))))
-        (variable
-          (identifier))))))
-
-==================
-Lambda body with projection and application
-==================
-
-\x y -> x.f y
-
----
-
-(source_file
-  (script
-    (lambda
-      (param
-        (identifier))
-      (param
-        (identifier))
-      (application
-        (projection
-          (variable
-            (identifier))
-          (identifier))
-        (variable
-          (identifier))))))
-
-==================
-Lambda with struct pattern
-==================
-
-\(x:{ foo: 1}) -> x.a
-
----
-
-(source_file
-  (script
-    (lambda
-      (param
-        (typed_param
-          (identifier)
-          (struct
-            (key_value
-              (key
-                (identifier))
-              (variable
-                (identifier))))))
-      (projection
-        (variable
-          (identifier))
-        (identifier)))))

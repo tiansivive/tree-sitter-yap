@@ -11,68 +11,6 @@ Empty struct
     (struct)))
 
 ==================
-Struct with fields
-==================
-
-{ x: a, y: b }
-
----
-
-(source_file
-  (script
-    (struct
-      (key_value
-        (key
-          (identifier))
-        (variable
-          (identifier)))
-      (key_value
-        (key
-          (identifier))
-        (variable
-          (identifier))))))
-
-==================
-Row with fields
-==================
-
-[ x: a, y: b ]
-
----
-
-(source_file
-  (script
-    (row
-      (key_value
-        (key
-          (identifier))
-        (variable
-          (identifier)))
-      (key_value
-        (key
-          (identifier))
-        (variable
-          (identifier))))))
-
-==================
-Tuple with elements
-==================
-
-{ a, b, c }
-
----
-
-(source_file
-  (script
-    (tuple
-      (variable
-        (identifier))
-      (variable
-        (identifier))
-      (variable
-        (identifier)))))
-
-==================
 Empty Lit
 ==================
 
@@ -85,22 +23,26 @@ Empty Lit
     (list)))
 
 ==================
-List with literals
+Struct with fields
 ==================
 
-[1, 2, 3]
+{ x: a, y: b }
 
 ---
 
 (source_file
   (script
-    (list
-      (literal
-        (number))
-      (literal
-        (number))
-      (literal
-        (number)))))
+    (struct
+      (key_value
+        (key
+          (field))
+        (variable
+          (identifier)))
+      (key_value
+        (key
+          (field))
+        (variable
+          (identifier))))))
 
 ==================
 Struct with numeric keys
@@ -123,6 +65,80 @@ Struct with numeric keys
           (index))
         (variable
           (identifier))))))
+
+==================
+Row with fields
+==================
+
+[ x: a, y: b ]
+
+---
+
+(source_file
+  (script
+    (row
+      (key_value
+        (key
+          (field))
+        (variable
+          (identifier)))
+      (key_value
+        (key
+          (field))
+        (variable
+          (identifier))))))
+
+==================
+Tuple with elements
+==================
+
+{ a, b, c }
+
+---
+
+(source_file
+  (script
+    (tuple
+      (variable
+        (identifier))
+      (variable
+        (identifier))
+      (variable
+        (identifier)))))
+
+==================
+List with literals
+==================
+
+[1, 2, 3]
+
+---
+
+(source_file
+  (script
+    (list
+      (literal
+        (number))
+      (literal
+        (number))
+      (literal
+        (number)))))
+
+==================
+Dict type
+==================
+
+{ [Int]: String }
+
+---
+
+(source_file
+  (script
+    (dict
+      (variable
+        (identifier))
+      (variable
+        (identifier)))))
 
 ==================
 Tagged constructor
@@ -154,9 +170,27 @@ Tagged with struct
       (struct
         (key_value
           (key
-            (identifier))
+            (field))
           (literal
             (number)))))))
+
+==================
+Tagged with tuple payload
+==================
+
+#Cons { x, y }
+
+---
+
+(source_file
+  (script
+    (tagged
+      (identifier)
+      (tuple
+        (variable
+          (identifier))
+        (variable
+          (identifier))))))
 
 ==================
 Variant with multiple tags
@@ -171,85 +205,33 @@ Variant with multiple tags
     (variant
       (tagged
         (identifier)
-        (variant
-          (tagged
-            (identifier)
-            (variable
-              (identifier))))))))
-
-==================
-Dict type
-==================
-
-{ [Int]: String }
-
----
-
-(source_file
-  (script
-    (tuple
-      (ann
-        (list
-          (variable
-            (identifier)))
+        (literal))
+      (tagged
+        (identifier)
         (variable
           (identifier))))))
 
 ==================
-Record update injection
+Tagged with variant payload
 ==================
 
-{ r | x = 1 }
+#Either | #Left a | #Right b
 
 ---
 
 (source_file
   (script
-    (injection
-      (variable
-        (identifier))
-      (assignment
-        (identifier)
-        (literal
-          (number))))))
-
-==================
-Injection with multiple assignments
-==================
-
-{ | x = 1, y = 2 }
-
----
-
-(source_file
-  (script
-    (injection
-      (assignment
-        (identifier)
-        (literal
-          (number)))
-      (assignment
-        (identifier)
-        (literal
-          (number))))))
-
-==================
-Row with tail variable
-==================
-
-[ x: a | rest ]
-
----
-
-(source_file
-  (script
-    (list
-      (ann
-        (variable
-          (identifier))
-        (variable
-          (identifier)))
-      (identifier))))
+    (tagged
+      (identifier)
+      (variant
+        (tagged
+          (identifier)
+          (variable
+            (identifier)))
+        (tagged
+          (identifier)
+          (variable
+            (identifier)))))))
 
 ==================
 Struct with tail variable
@@ -264,7 +246,25 @@ Struct with tail variable
     (struct
       (key_value
         (key
-          (identifier))
+          (field))
+        (variable
+          (identifier)))
+      (identifier))))
+
+==================
+Row with tail variable
+==================
+
+[ x: a | rest ]
+
+---
+
+(source_file
+  (script
+    (row
+      (key_value
+        (key
+          (field))
         (variable
           (identifier)))
       (identifier))))
@@ -304,41 +304,39 @@ List with tail variable
       (identifier))))
 
 ==================
-Tagged with tuple payload
+Record update injection
 ==================
 
-#Cons { x, y }
+{ r | x = 1 }
 
 ---
 
 (source_file
   (script
-    (tagged
-      (identifier)
-      (tuple
-        (variable
-          (identifier))
-        (variable
-          (identifier))))))
+    (injection
+      (variable
+        (identifier))
+      (assignment
+        (identifier)
+        (literal
+          (number))))))
 
 ==================
-Tagged with variant payload
+Injection with multiple assignments
 ==================
 
-
+{ | x = 1, y = 2 }
 
 ---
 
 (source_file
   (script
-    (tagged
-      (identifier)
-      (variant
-        (tagged
-          (identifier)
-          (variable
-            (identifier)))
-        (tagged
-          (identifier)
-          (variable
-            (identifier)))))))
+    (injection
+      (assignment
+        (identifier)
+        (literal
+          (number)))
+      (assignment
+        (identifier)
+        (literal
+          (number))))))

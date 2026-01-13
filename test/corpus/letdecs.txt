@@ -43,8 +43,10 @@ let f = \x -> x
     (letdec
       (identifier)
       (lambda
-        (param
-          (identifier))
+        (params
+          (param
+            (identifier)))
+        (explicit_arrow)
         (variable
           (identifier))))))
 
@@ -63,10 +65,13 @@ let f : Int -> String = \x -> x
       (arrow
         (variable
           (identifier))
+        (explicit_arrow)
         (variable
           (identifier)))
       (lambda
-        (param
-          (identifier))
+        (params
+          (param
+            (identifier)))
+        (explicit_arrow)
         (variable
           (identifier))))))
