@@ -150,7 +150,6 @@ module.exports = grammar({
       $.type_expr,
       $.lambda,
       $.match,
-      $.block,
       $.unary,
       $.operation,
       $.application,
@@ -159,15 +158,24 @@ module.exports = grammar({
     ),
 
             // Annotations
-    annotation: $ => prec.right(PRECEDENCE.syntactic.base, seq($.expr, ':', $.expr)),
+    annotation: $ => prec.right(PRECEDENCE.syntactic.base, seq(
+      field('expr', $.expr),
+      ':',
+      field('type', $.expr)
+    )),
 
     // Unary operations (prefix)
     unary: $ => prec.right(PRECEDENCE.syntactic.unary, seq(choice('-', '+'), $.expr)),
 
-    // Application (highest precedence)
+   
     application: $ => choice(
-      prec.left(PRECEDENCE.syntactic.application, seq(field('function', $.expr), field('argument', $.atom))),
-      prec.left(PRECEDENCE.syntactic.application, seq(field('function', $.expr), alias('@', $.implicit_application), field('argument', $.atom)))
+      prec.right(PRECEDENCE.syntactic.application, seq(field('function', $.atom), repeat1($.argument))),
+      // prec.right(PRECEDENCE.syntactic.application, seq(field('function', $.expr), repeat1(field('argument', field("implicit", seq('@', $.atom))))))
+    ),
+
+    argument: $ => choice(
+      field("explicit", $.atom),
+      field("implicit", seq('@', $.atom))
     ),
 
     // Operation (lower precedence than application)
@@ -196,7 +204,8 @@ module.exports = grammar({
       $.reset,
       $.shift,
       $.resume,
-      $.parenthesized
+      $.parenthesized,
+      $.block,
     ),
 
     parenthesized: $ => parens($.expr),

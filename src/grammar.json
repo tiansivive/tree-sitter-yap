@@ -535,10 +535,6 @@
         },
         {
           "type": "SYMBOL",
-          "name": "block"
-        },
-        {
-          "type": "SYMBOL",
           "name": "unary"
         },
         {
@@ -566,16 +562,24 @@
         "type": "SEQ",
         "members": [
           {
-            "type": "SYMBOL",
-            "name": "expr"
+            "type": "FIELD",
+            "name": "expr",
+            "content": {
+              "type": "SYMBOL",
+              "name": "expr"
+            }
           },
           {
             "type": "STRING",
             "value": ":"
           },
           {
-            "type": "SYMBOL",
-            "name": "expr"
+            "type": "FIELD",
+            "name": "type",
+            "content": {
+              "type": "SYMBOL",
+              "name": "expr"
+            }
           }
         ]
       }
@@ -610,7 +614,7 @@
       "type": "CHOICE",
       "members": [
         {
-          "type": "PREC_LEFT",
+          "type": "PREC_RIGHT",
           "value": 60,
           "content": {
             "type": "SEQ",
@@ -620,50 +624,45 @@
                 "name": "function",
                 "content": {
                   "type": "SYMBOL",
-                  "name": "expr"
+                  "name": "atom"
                 }
               },
               {
-                "type": "FIELD",
-                "name": "argument",
+                "type": "REPEAT1",
                 "content": {
                   "type": "SYMBOL",
-                  "name": "atom"
+                  "name": "argument"
                 }
               }
             ]
           }
+        }
+      ]
+    },
+    "argument": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "explicit",
+          "content": {
+            "type": "SYMBOL",
+            "name": "atom"
+          }
         },
         {
-          "type": "PREC_LEFT",
-          "value": 60,
+          "type": "FIELD",
+          "name": "implicit",
           "content": {
             "type": "SEQ",
             "members": [
               {
-                "type": "FIELD",
-                "name": "function",
-                "content": {
-                  "type": "SYMBOL",
-                  "name": "expr"
-                }
+                "type": "STRING",
+                "value": "@"
               },
               {
-                "type": "ALIAS",
-                "content": {
-                  "type": "STRING",
-                  "value": "@"
-                },
-                "named": true,
-                "value": "implicit_application"
-              },
-              {
-                "type": "FIELD",
-                "name": "argument",
-                "content": {
-                  "type": "SYMBOL",
-                  "name": "atom"
-                }
+                "type": "SYMBOL",
+                "name": "atom"
               }
             ]
           }
@@ -945,6 +944,10 @@
         {
           "type": "SYMBOL",
           "name": "parenthesized"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "block"
         }
       ]
     },

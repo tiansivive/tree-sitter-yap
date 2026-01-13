@@ -4,6 +4,10 @@
     "named": true,
     "subtypes": [
       {
+        "type": "block",
+        "named": true
+      },
+      {
         "type": "hole",
         "named": true
       },
@@ -75,10 +79,6 @@
       },
       {
         "type": "atom",
-        "named": true
-      },
-      {
-        "type": "block",
         "named": true
       },
       {
@@ -222,33 +222,18 @@
   {
     "type": "annotation",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "expr",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "application",
-    "named": true,
     "fields": {
-      "argument": {
+      "expr": {
         "multiple": false,
         "required": true,
         "types": [
           {
-            "type": "atom",
+            "type": "expr",
             "named": true
           }
         ]
       },
-      "function": {
+      "type": {
         "multiple": false,
         "required": true,
         "types": [
@@ -258,16 +243,62 @@
           }
         ]
       }
+    }
+  },
+  {
+    "type": "application",
+    "named": true,
+    "fields": {
+      "function": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "atom",
+            "named": true
+          }
+        ]
+      }
     },
     "children": {
-      "multiple": false,
-      "required": false,
+      "multiple": true,
+      "required": true,
       "types": [
         {
-          "type": "implicit_application",
+          "type": "argument",
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "argument",
+    "named": true,
+    "fields": {
+      "explicit": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "atom",
+            "named": true
+          }
+        ]
+      },
+      "implicit": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "@",
+            "named": false
+          },
+          {
+            "type": "atom",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -1423,6 +1454,10 @@
     "named": false
   },
   {
+    "type": "@",
+    "named": false
+  },
+  {
     "type": "Row",
     "named": false
   },
@@ -1485,10 +1520,6 @@
   },
   {
     "type": "identifier",
-    "named": true
-  },
-  {
-    "type": "implicit_application",
     "named": true
   },
   {
