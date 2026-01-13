@@ -278,7 +278,7 @@ module.exports = grammar({
 
 
     // Row terms
-    row: $ => seq('[', sep1($.key_value, ','), optional(field("tail", seq('|', $.identifier))), ']'),
+    row: $ => seq('[', sep1($.key_value, ','), prec.right(PRECEDENCE.syntactic.base, optional(field("tail", seq('|', $.identifier)))), ']'),
 
     // Redefine key_value to have higher precedence over plain expressions
     key_value: $ => prec.right(PRECEDENCE.syntactic.base, seq($.key, ':', $.expr)),
@@ -292,15 +292,15 @@ module.exports = grammar({
     // Struct
     struct: $ => choice(
       seq('{', '}'),
-      seq('{', sep1($.key_value, ','), optional(field("tail", seq('|', $.identifier))), '}')
+      seq('{', sep1($.key_value, ','), prec.right(PRECEDENCE.syntactic.base, optional(field("tail", seq('|', $.identifier)))), '}')
     ),
     // Tuple
-    tuple: $ => seq('{', sep1($.expr, ','), optional(field("tail", seq('|', $.identifier))), '}'),
+    tuple: $ => seq('{', sep1($.expr, ','), prec.right(PRECEDENCE.syntactic.base, optional(field("tail", seq('|', $.identifier)))), '}'),
     
     // List
     list: $ => choice(
       seq('[', ']'),
-      seq('[', sep1($.expr, ','), optional(field("tail", seq('|', $.identifier))), ']')
+      seq('[', sep1($.expr, ','), prec.right(PRECEDENCE.syntactic.base, optional(field("tail", seq('|', $.identifier)))), ']')
     ),
 
     // Variant
@@ -355,17 +355,17 @@ module.exports = grammar({
 
     pattern_struct: $ => choice(
       seq('{', optional(seq('|', $.identifier)),'}'),
-      seq('{', sep1($.pattern_key_value, ','), optional(seq('|', $.identifier)), '}')
+      seq('{', sep1($.pattern_key_value, ','), prec.right(PRECEDENCE.syntactic.base, optional(seq('|', $.identifier))), '}')
     ),
 
-    pattern_tuple: $ => seq('{', sep1($.pattern, ','), optional(seq('|', $.identifier)), '}'),
+    pattern_tuple: $ => seq('{', sep1($.pattern, ','), prec.right(PRECEDENCE.syntactic.base, optional(seq('|', $.identifier))), '}'),
 
     pattern_list: $ => choice(
       seq('[', ']'),
-      seq('[', sep1($.pattern, ','), optional(seq('|', $.identifier)), ']')
+      seq('[', sep1($.pattern, ','), prec.right(PRECEDENCE.syntactic.base, optional(seq('|', $.identifier))), ']')
     ),
 
-    pattern_row: $ => seq('[', commaSep($.pattern_key_value), optional(seq('|', $.identifier)), ']'),
+    pattern_row: $ => seq('[', commaSep($.pattern_key_value), prec.right(PRECEDENCE.syntactic.base, optional(seq('|', $.identifier))), ']'),
 
     pattern_key_value: $ => seq($.identifier, ':', $.pattern),
 

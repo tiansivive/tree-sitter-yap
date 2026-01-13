@@ -36,7 +36,7 @@ Struct with fields
 Row with fields
 ==================
 
-( x: a, y: b )
+[ x: a, y: b ]
 
 ---
 
@@ -162,7 +162,7 @@ Tagged with struct
 Variant with multiple tags
 ==================
 
-| #Nil | #Cons a
+| #Nil ! | #Cons a
 
 ---
 
@@ -325,7 +325,7 @@ Tagged with tuple payload
 Tagged with variant payload
 ==================
 
-#Either | #Left a | #Right b
+
 
 ---
 
