@@ -65,7 +65,7 @@ module.exports = grammar({
     $.expr,
     $.pattern,
     $.atom,
-    $.statement
+    $.statement,
   ],
 
   rules: {
@@ -169,7 +169,7 @@ module.exports = grammar({
 
    
     application: $ => choice(
-      prec.right(PRECEDENCE.syntactic.application, seq(field('function', $.atom), repeat1($.argument))),
+      prec.right(PRECEDENCE.syntactic.application, seq(field('function', $.atom), field("argument", repeat1($.argument)))),
       // prec.right(PRECEDENCE.syntactic.application, seq(field('function', $.expr), repeat1(field('argument', field("implicit", seq('@', $.atom))))))
     ),
 
