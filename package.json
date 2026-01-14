@@ -23,6 +23,7 @@
     "bindings/node/*",
     "queries/*",
     "src/**",
+    "scripts/**",
     "*.wasm"
   ],
   "dependencies": {
