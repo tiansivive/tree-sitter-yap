@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "tree-sitter-yap"
 description = "A parser for the Yap language"
-version = "0.1.1"
+version = "0.1.2"
 keywords = ["incremental", "parsing", "tree-sitter", "yap"]
 classifiers = [
   "Intended Audience :: Developers",
