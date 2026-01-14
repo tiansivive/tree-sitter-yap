@@ -1,6 +1,6 @@
 {
   "name": "tree-sitter-yap",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "A parser for the Yap language",
   "repository": "https://github.com/tree-sitter/tree-sitter-yap",
   "license": "MIT",
