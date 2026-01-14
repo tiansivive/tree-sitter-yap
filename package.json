@@ -42,9 +42,10 @@
     }
   },
   "scripts": {
-    "install": "node-gyp-build",
+    "install": "node-gyp-build && node scripts/extract-field-map.js",
     "prestart": "tree-sitter build --wasm",
     "start": "tree-sitter playground",
-    "test": "node --test bindings/node/*_test.js"
+    "test": "node --test bindings/node/*_test.js",
+    "generate:fieldmap": "node scripts/extract-field-map.js"
   }
 }

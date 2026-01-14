@@ -165,7 +165,7 @@ module.exports = grammar({
     )),
 
     // Unary operations (prefix)
-    unary: $ => prec.right(PRECEDENCE.syntactic.unary, seq(choice('-', '+'), $.expr)),
+    unary: $ => prec.right(PRECEDENCE.syntactic.unary, seq(field('operator', choice('-', '+')), field('operand', $.expr))),
 
    
     application: $ => choice(
@@ -180,13 +180,13 @@ module.exports = grammar({
 
     // Operation (lower precedence than application)
     operation: $ => choice(
-      prec.left(PRECEDENCE.arithmetic.multiplicative, seq($.expr, choice('*', '/', '%'), $.expr)),
-      prec.left(PRECEDENCE.arithmetic.additive, seq($.expr, choice('+', '-'), $.expr)),
-      prec.left(PRECEDENCE.arithmetic.concat, seq($.expr, choice('<>', '++'), $.expr)),
-      prec.left(PRECEDENCE.arithmetic.relational, seq($.expr, choice('==', '!=', '<=', '>=', '<', '>'), $.expr)),
-      prec.left(PRECEDENCE.control.pipeline, seq($.expr, choice('|>', '<|'), $.expr)),
-      prec.left(PRECEDENCE.logical.and, seq($.expr, '&&', $.expr)),
-      prec.left(PRECEDENCE.logical.or, seq($.expr, '||', $.expr))
+      prec.left(PRECEDENCE.arithmetic.multiplicative, seq(field('left', $.expr), field('operator', choice('*', '/', '%')), field('right', $.expr))),
+      prec.left(PRECEDENCE.arithmetic.additive, seq(field('left', $.expr), field('operator', choice('+', '-')), field('right', $.expr))),
+      prec.left(PRECEDENCE.arithmetic.concat, seq(field('left', $.expr), field('operator', choice('<>', '++')), field('right', $.expr))),
+      prec.left(PRECEDENCE.arithmetic.relational, seq(field('left', $.expr), field('operator', choice('==', '!=', '<=', '>=', '<', '>')), field('right', $.expr))),
+      prec.left(PRECEDENCE.control.pipeline, seq(field('left', $.expr), field('operator', choice('|>', '<|')), field('right', $.expr))),
+      prec.left(PRECEDENCE.logical.and, seq(field('left', $.expr), field('operator', alias('&&', $.and)), field('right', $.expr))),
+      prec.left(PRECEDENCE.logical.or, seq(field('left', $.expr), field('operator', alias('||', $.or)), field('right', $.expr)))
     ),
 
     // Atoms
@@ -282,10 +282,10 @@ module.exports = grammar({
 
 
     // Row terms
-    row: $ => seq('[', sep1($.key_value, ','), prec.right(PRECEDENCE.syntactic.tail, optional(field("tail", seq('|', $.identifier)))), ']'),
+    row: $ => seq('[', field('field', sep1($.key_value, ',')), prec.right(PRECEDENCE.syntactic.tail, optional(field("tail", seq('|', $.identifier)))), ']'),
 
     // Redefine key_value to have higher precedence over plain expressions
-    key_value: $ => prec.right(PRECEDENCE.syntactic.field, seq($.key, ':', $.expr)),
+    key_value: $ => prec.right(PRECEDENCE.syntactic.field, seq(field('key', $.key), ':', field('value', $.expr))),
     key: $ => prec.right(PRECEDENCE.syntactic.key, choice(
       alias($.identifier, $.field),
       alias($._digits, $.index)
@@ -296,25 +296,25 @@ module.exports = grammar({
     // Struct
     struct: $ => choice(
       seq('{', '}'),
-      seq('{', sep1($.key_value, ','), prec.right(PRECEDENCE.syntactic.tail, optional(field("tail", seq('|', $.identifier)))), '}')
+      seq('{', field('field', sep1($.key_value, ',')), prec.right(PRECEDENCE.syntactic.tail, optional(field("tail", seq('|', $.identifier)))), '}')
     ),
     // Tuple
-    tuple: $ => seq('{', sep1($.expr, ','), prec.right(PRECEDENCE.syntactic.tail, optional(field("tail", seq('|', $.identifier)))), '}'),
+    tuple: $ => seq('{', field('element', sep1($.expr, ',')), prec.right(PRECEDENCE.syntactic.tail, optional(field("tail", seq('|', $.identifier)))), '}'),
     
     // List
     list: $ => choice(
       seq('[', ']'),
-      seq('[', sep1($.expr, ','), prec.right(PRECEDENCE.syntactic.tail, optional(field("tail", seq('|', $.identifier)))), ']')
+      seq('[', field('element', sep1($.expr, ',')), prec.right(PRECEDENCE.syntactic.tail, optional(field("tail", seq('|', $.identifier)))), ']')
     ),
 
     // Variant
-    variant: $ => prec.right(PRECEDENCE.syntactic.base, seq('|', sep1($.tagged, '|'))),
+    variant: $ => prec.right(PRECEDENCE.syntactic.base, seq('|', field('variant', sep1($.tagged, '|')))),
 
     // Tagged
     tagged: $ => prec.right(PRECEDENCE.syntactic.tag, seq('#', field('tag', $.identifier), field('payload', $.expr))),
 
     // Dict
-    dict: $ => prec.right(PRECEDENCE.syntactic.base, seq('{', '[', $.expr, ']', ':', $.expr, '}')),
+    dict: $ => prec.right(PRECEDENCE.syntactic.base, seq('{', '[', field('index', $.expr), ']', ':', field('type', $.expr), '}')),
 
     // Projection
     projection: $ => choice(
@@ -332,7 +332,7 @@ module.exports = grammar({
 
     // Block
     block: $ => choice(
-      seq('{', field('statements', repeat(seq($.statement, ';'))), optional(field('return', $.return_statement)), '}'),
+      seq('{', field('statement', repeat(seq($.statement, ';'))), optional(field('return', $.return_statement)), '}'),
       seq('{', field('return', $.return_statement), '}')
     ),
 
@@ -358,29 +358,29 @@ module.exports = grammar({
     pattern_tagged: $ => prec.right(PRECEDENCE.syntactic.tag, seq('#', field('tag', $.identifier), field('payload', $.pattern))),
 
     pattern_struct: $ => choice(
-      seq('{', optional(seq('|', $.identifier)),'}'),
-      seq('{', sep1($.pattern_key_value, ','), prec.right(PRECEDENCE.syntactic.base, optional(seq('|', $.identifier))), '}')
+      seq('{', optional(field('tail', seq('|', $.identifier))),'}'),
+      seq('{', field('field', sep1($.pattern_key_value, ',')), prec.right(PRECEDENCE.syntactic.base, optional(field('tail', seq('|', $.identifier)))), '}')
     ),
 
-    pattern_tuple: $ => seq('{', sep1($.pattern, ','), prec.right(PRECEDENCE.syntactic.base, optional(seq('|', $.identifier))), '}'),
+    pattern_tuple: $ => seq('{', field('element', sep1($.pattern, ',')), prec.right(PRECEDENCE.syntactic.base, optional(field('tail', seq('|', $.identifier)))), '}'),
 
     pattern_list: $ => choice(
       seq('[', ']'),
-      seq('[', sep1($.pattern, ','), prec.right(PRECEDENCE.syntactic.base, optional(seq('|', $.identifier))), ']')
+      seq('[', field('element', sep1($.pattern, ',')), prec.right(PRECEDENCE.syntactic.base, optional(field('tail', seq('|', $.identifier)))), ']')
     ),
 
-    pattern_row: $ => seq('[', commaSep($.pattern_key_value), prec.right(PRECEDENCE.syntactic.base, optional(seq('|', $.identifier))), ']'),
+    pattern_row: $ => seq('[', field('field', commaSep($.pattern_key_value)), prec.right(PRECEDENCE.syntactic.base, optional(field('tail', seq('|', $.identifier)))), ']'),
 
-    pattern_key_value: $ => seq($.identifier, ':', $.pattern),
+    pattern_key_value: $ => seq(field('key', $.identifier), ':', field('pattern', $.pattern)),
 
     wildcard: $ => '_',
 
     // Delimited continuations (right-associative)
-    reset: $ => prec.right(PRECEDENCE.control.continuations, seq('reset', $.expr)),
+    reset: $ => prec.right(PRECEDENCE.control.continuations, seq('reset', field('body', $.expr))),
 
-    shift: $ => prec.right(PRECEDENCE.control.continuations, seq('shift', $.expr)),
+    shift: $ => prec.right(PRECEDENCE.control.continuations, seq('shift', field('body', $.expr))),
 
-    resume: $ => prec.right(PRECEDENCE.control.continuations, seq('resume', $.expr)),
+    resume: $ => prec.right(PRECEDENCE.control.continuations, seq('resume', field('body', $.expr))),
     // Modalities
     quantity: $ => choice('0', '1', '*'),
 
