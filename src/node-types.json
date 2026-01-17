@@ -286,13 +286,9 @@
         ]
       },
       "implicit": {
-        "multiple": true,
+        "multiple": false,
         "required": false,
         "types": [
-          {
-            "type": "@",
-            "named": false
-          },
           {
             "type": "atom",
             "named": true
@@ -316,23 +312,11 @@
         ]
       },
       "domain": {
-        "multiple": true,
+        "multiple": false,
         "required": true,
         "types": [
           {
-            "type": "(",
-            "named": false
-          },
-          {
-            "type": ")",
-            "named": false
-          },
-          {
-            "type": ",",
-            "named": false
-          },
-          {
-            "type": "type_expr",
+            "type": "domain",
             "named": true
           }
         ]
@@ -434,6 +418,26 @@
         "types": [
           {
             "type": "type_expr",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "domain",
+    "named": true,
+    "fields": {
+      "param": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "type_expr",
+            "named": true
+          },
+          {
+            "type": "typing",
             "named": true
           }
         ]
@@ -1152,23 +1156,11 @@
         ]
       },
       "domain": {
-        "multiple": true,
+        "multiple": false,
         "required": true,
         "types": [
           {
-            "type": "(",
-            "named": false
-          },
-          {
-            "type": ")",
-            "named": false
-          },
-          {
-            "type": ",",
-            "named": false
-          },
-          {
-            "type": "typing",
+            "type": "domain",
             "named": true
           }
         ]

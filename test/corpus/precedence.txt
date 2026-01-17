@@ -338,7 +338,8 @@ Annotation with pi type
         (variable
           (identifier))
         (arrow
-          (literal)
+          (domain
+            (literal))
           (explicit)
           (literal))))))
 
@@ -353,22 +354,25 @@ Pi with applications
 (source_file
   (script
     (pi
-      (typing
-        (identifier)
-        (literal))
-      (explicit)
-      (pi
+      (domain
         (typing
           (identifier)
-          (literal))
+          (literal)))
+      (explicit)
+      (pi
+        (domain
+          (typing
+            (identifier)
+            (literal)))
         (explicit)
         (arrow
-          (application
-            (variable
-              (identifier))
-            (argument
+          (domain
+            (application
               (variable
-                (identifier))))
+                (identifier))
+              (argument
+                (variable
+                  (identifier)))))
           (explicit)
           (application
             (variable
@@ -388,14 +392,16 @@ Pi with struct
 (source_file
   (script
     (pi
-      (typing
-        (identifier)
-        (literal))
-      (explicit)
-      (pi
+      (domain
         (typing
           (identifier)
-          (literal))
+          (literal)))
+      (explicit)
+      (pi
+        (domain
+          (typing
+            (identifier)
+            (literal)))
         (explicit)
         (struct
           (key_value

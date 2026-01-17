@@ -63,8 +63,9 @@ let f : Int -> String = \x -> x
     (letdec
       (identifier)
       (arrow
-        (variable
-          (identifier))
+        (domain
+          (variable
+            (identifier)))
         (explicit)
         (variable
           (identifier)))

@@ -176,7 +176,7 @@ module.exports = grammar({
 
     argument: $ => choice(
       field("explicit", $.atom),
-      field("implicit", seq('@', $.atom))
+      seq('@', field("implicit", $.atom))
     ),
 
     // Operation (lower precedence than application)
@@ -247,27 +247,27 @@ module.exports = grammar({
 
         // Pi types (right-associative, domain must be (identifier: type))
     pi: $ => choice(
-      prec.right(PRECEDENCE.syntactic.arrow, seq(field('domain', $._pidomain), field("icit", alias('->', $.explicit)), field('codomain', $.type_expr))),
-      prec.right(PRECEDENCE.syntactic.arrow, seq(field('domain', $._pidomain), field("icit", alias('=>', $.implicit)), field('codomain', $.type_expr)))
+      prec.right(PRECEDENCE.syntactic.arrow, seq(field('domain', alias($.pidomain, $.domain)), field("icit", alias('->', $.explicit)), field('codomain', $.type_expr))),
+      prec.right(PRECEDENCE.syntactic.arrow, seq(field('domain', alias($.pidomain, $.domain)), field("icit", alias('=>', $.implicit)), field('codomain', $.type_expr)))
     ),
 
     // Simple arrow types (right-associative)
     arrow: $ => choice(
-      prec.right(PRECEDENCE.syntactic.arrow, seq(field('domain', $._arrdomain), field("icit", alias('->', $.explicit)), field('codomain', $.type_expr))),
+      prec.right(PRECEDENCE.syntactic.arrow, seq(field('domain', alias($.arrdomain, $.domain)), field("icit", alias('->', $.explicit)), field('codomain', $.type_expr))),
       // prec.right(PRECEDENCE.syntactic.arrow, seq(field('domain', $.expr), alias('->', $.explicit_arrow), field('codomain', $.expr))),
-      prec.right(PRECEDENCE.syntactic.arrow, seq(field('domain', $._arrdomain), field("icit", alias('=>', $.implicit)), field('codomain', $.type_expr))),
+      prec.right(PRECEDENCE.syntactic.arrow, seq(field('domain', alias($.arrdomain, $.domain)), field("icit", alias('=>', $.implicit)), field('codomain', $.type_expr))),
       // prec.right(PRECEDENCE.syntactic.arrow, seq(field('domain', $.expr), alias('=>', $.implicit_arrow), field('codomain', $.expr)))
     ),
 
-    _pidomain: $ => prec.right(PRECEDENCE.syntactic.domain, parens(buildDomain($.typing))),
-    _arrdomain: $ => choice(
-      prec.right(PRECEDENCE.syntactic.domain, parens(buildDomain($.type_expr))),
+    pidomain: $ => prec.right(PRECEDENCE.syntactic.domain, parens(buildDomain(field("param", $.typing)))),
+    arrdomain: $ => choice(
+      prec.right(PRECEDENCE.syntactic.domain, parens(buildDomain(field("param", $.type_expr)))),
 
       // Nesting must be explicit with parentheses
       // Eg. A -> B -> C must be parsed as A -> (B -> C)
       // (A -> B) -> C must be written as (A -> B) -> C
       // If type_expr were used, it would cause the parser to interpret it as left-associative
-      prec.right(PRECEDENCE.syntactic.domain, $.expr)
+      prec.right(PRECEDENCE.syntactic.domain, field("param", $.expr))
     ),
 
     // Lambda

@@ -221,8 +221,9 @@ Statement with return type annotation
               (variable
                 (identifier))))
           (arrow
-            (variable
-              (identifier))
+            (domain
+              (variable
+                (identifier)))
             (explicit)
             (variable
               (identifier))))))))

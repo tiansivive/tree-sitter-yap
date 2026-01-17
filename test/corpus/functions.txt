@@ -200,8 +200,9 @@ Int -> String
 (source_file
   (script
     (arrow
-      (variable
-        (identifier))
+      (domain
+        (variable
+          (identifier)))
       (explicit)
       (variable
         (identifier)))))
@@ -217,12 +218,14 @@ Int -> String -> Bool
 (source_file
   (script
     (arrow
-      (variable
-        (identifier))
+      (domain
+        (variable
+          (identifier)))
       (explicit)
       (arrow
-        (variable
-          (identifier))
+        (domain
+          (variable
+            (identifier)))
         (explicit)
         (variable
           (identifier))))))
@@ -238,8 +241,9 @@ Int => String
 (source_file
   (script
     (arrow
-      (variable
-        (identifier))
+      (domain
+        (variable
+          (identifier)))
       (implicit)
       (variable
         (identifier)))))
@@ -255,10 +259,11 @@ Dependent pi type
 (source_file
   (script
     (pi
-      (typing
-        (identifier)
-        (variable
-          (identifier)))
+      (domain
+        (typing
+          (identifier)
+          (variable
+            (identifier))))
       (explicit)
       (variable
         (identifier)))))
@@ -289,10 +294,11 @@ Parenthesized complex type
   (script
     (parenthesized
       (pi
-        (typing
-          (identifier)
-          (variable
-            (identifier)))
+        (domain
+          (typing
+            (identifier)
+            (variable
+              (identifier))))
         (explicit)
         (variable
           (identifier))))))
