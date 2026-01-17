@@ -104,6 +104,40 @@
     ]
   },
   {
+    "type": "literal",
+    "named": true,
+    "subtypes": [
+      {
+        "type": "Bang",
+        "named": true
+      },
+      {
+        "type": "Row",
+        "named": true
+      },
+      {
+        "type": "TypeOfTypes",
+        "named": true
+      },
+      {
+        "type": "Unit",
+        "named": true
+      },
+      {
+        "type": "boolean",
+        "named": true
+      },
+      {
+        "type": "number",
+        "named": true
+      },
+      {
+        "type": "string",
+        "named": true
+      }
+    ]
+  },
+  {
     "type": "pattern",
     "named": true,
     "subtypes": [
@@ -512,10 +546,6 @@
         "required": true,
         "types": [
           {
-            "type": ",",
-            "named": false
-          },
-          {
             "type": "assignment",
             "named": true
           }
@@ -653,52 +683,21 @@
         "required": false,
         "types": [
           {
-            "type": ",",
-            "named": false
-          },
-          {
             "type": "type_expr",
             "named": true
           }
         ]
       },
       "tail": {
-        "multiple": true,
+        "multiple": false,
         "required": false,
         "types": [
           {
             "type": "identifier",
             "named": true
-          },
-          {
-            "type": "|",
-            "named": false
           }
         ]
       }
-    }
-  },
-  {
-    "type": "literal",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": false,
-      "types": [
-        {
-          "type": "boolean",
-          "named": true
-        },
-        {
-          "type": "number",
-          "named": true
-        },
-        {
-          "type": "string",
-          "named": true
-        }
-      ]
     }
   },
   {
@@ -1533,18 +1532,10 @@
           {
             "type": "tagged",
             "named": true
-          },
-          {
-            "type": "|",
-            "named": false
           }
         ]
       }
     }
-  },
-  {
-    "type": "!",
-    "named": false
   },
   {
     "type": "!=",
@@ -1651,16 +1642,20 @@
     "named": false
   },
   {
-    "type": "Row",
-    "named": false
+    "type": "Bang",
+    "named": true
   },
   {
-    "type": "Type",
-    "named": false
+    "type": "Row",
+    "named": true
+  },
+  {
+    "type": "TypeOfTypes",
+    "named": true
   },
   {
     "type": "Unit",
-    "named": false
+    "named": true
   },
   {
     "type": "[",

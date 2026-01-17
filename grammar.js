@@ -68,6 +68,7 @@ module.exports = grammar({
     $.pattern,
     $.atom,
     $.statement,
+    $.literal
   ],
 
   rules: {
@@ -229,10 +230,10 @@ module.exports = grammar({
       $.string,
       $.number,
       $.boolean,
-      'Type',
-      'Unit',
-      'Row',
-      '!',
+      alias('Type', $.TypeOfTypes),
+      alias('Unit', $.Unit),
+      alias('Row', $.Row),
+      alias('!', $.Bang),
     ),
 
     string: $ => /"(?:\\["bfnrt\/\\]|\\u[a-fA-F0-9]{4}|[^"\\])*"/,
@@ -312,11 +313,11 @@ module.exports = grammar({
     // List
     list: $ => choice(
       seq('[', ']'),
-      seq('[', field('element', sep1($.type_expr, ',')), prec.right(PRECEDENCE.syntactic.tail, optional(field("tail", seq('|', $.identifier)))), ']')
+      seq('[', sep1(field('element', $.type_expr), ','), prec.right(PRECEDENCE.syntactic.tail, optional(seq('|', field("tail", $.identifier)))), ']')
     ),
 
     // Variant
-    variant: $ => prec.right(PRECEDENCE.syntactic.tag, seq('|', field('variant', sep1($.tagged, '|')))),
+    variant: $ => prec.right(PRECEDENCE.syntactic.tag, seq('|', sep1(field('variant', $.tagged), '|'))),
 
     // Tagged
     tagged: $ => prec.right(PRECEDENCE.syntactic.tag, seq('#', field('tag', $.identifier), field('payload', $.expr))),
@@ -332,8 +333,8 @@ module.exports = grammar({
 
     // Injection
     injection: $ => choice(
-      prec.right(PRECEDENCE.syntactic.injection, seq('{', field('record', $.expr), '|', field('updates', sep1($.assignment, ',')), '}')),
-      prec.right(PRECEDENCE.syntactic.injection, seq('{', '|', field('updates', sep1($.assignment, ',')), '}'))
+      prec.right(PRECEDENCE.syntactic.injection, seq('{', field('record', $.expr), '|', sep1(field('updates', $.assignment), ','), '}')),
+      prec.right(PRECEDENCE.syntactic.injection, seq('{', '|', sep1(field('updates', $.assignment), ','), '}'))
     ),
 
     assignment: $ => seq(field('key', $.identifier), '=', field('value', $.type_expr)),
