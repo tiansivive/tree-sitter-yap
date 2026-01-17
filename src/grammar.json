@@ -1207,13 +1207,17 @@
                 }
               },
               {
-                "type": "ALIAS",
+                "type": "FIELD",
+                "name": "icit",
                 "content": {
-                  "type": "STRING",
-                  "value": "->"
-                },
-                "named": true,
-                "value": "explicit"
+                  "type": "ALIAS",
+                  "content": {
+                    "type": "STRING",
+                    "value": "->"
+                  },
+                  "named": true,
+                  "value": "explicit"
+                }
               },
               {
                 "type": "FIELD",
@@ -1241,13 +1245,17 @@
                 }
               },
               {
-                "type": "ALIAS",
+                "type": "FIELD",
+                "name": "icit",
                 "content": {
-                  "type": "STRING",
-                  "value": "=>"
-                },
-                "named": true,
-                "value": "implicit"
+                  "type": "ALIAS",
+                  "content": {
+                    "type": "STRING",
+                    "value": "=>"
+                  },
+                  "named": true,
+                  "value": "implicit"
+                }
               },
               {
                 "type": "FIELD",
@@ -1280,13 +1288,17 @@
                 }
               },
               {
-                "type": "ALIAS",
+                "type": "FIELD",
+                "name": "icit",
                 "content": {
-                  "type": "STRING",
-                  "value": "->"
-                },
-                "named": true,
-                "value": "explicit"
+                  "type": "ALIAS",
+                  "content": {
+                    "type": "STRING",
+                    "value": "->"
+                  },
+                  "named": true,
+                  "value": "explicit"
+                }
               },
               {
                 "type": "FIELD",
@@ -1314,13 +1326,17 @@
                 }
               },
               {
-                "type": "ALIAS",
+                "type": "FIELD",
+                "name": "icit",
                 "content": {
-                  "type": "STRING",
-                  "value": "=>"
-                },
-                "named": true,
-                "value": "implicit"
+                  "type": "ALIAS",
+                  "content": {
+                    "type": "STRING",
+                    "value": "=>"
+                  },
+                  "named": true,
+                  "value": "implicit"
+                }
               },
               {
                 "type": "FIELD",

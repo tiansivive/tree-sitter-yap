@@ -336,21 +336,21 @@
             "named": true
           }
         ]
+      },
+      "icit": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "explicit",
+            "named": true
+          },
+          {
+            "type": "implicit",
+            "named": true
+          }
+        ]
       }
-    },
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "explicit",
-          "named": true
-        },
-        {
-          "type": "implicit",
-          "named": true
-        }
-      ]
     }
   },
   {
@@ -1172,21 +1172,21 @@
             "named": true
           }
         ]
+      },
+      "icit": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "explicit",
+            "named": true
+          },
+          {
+            "type": "implicit",
+            "named": true
+          }
+        ]
       }
-    },
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "explicit",
-          "named": true
-        },
-        {
-          "type": "implicit",
-          "named": true
-        }
-      ]
     }
   },
   {

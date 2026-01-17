@@ -247,15 +247,15 @@ module.exports = grammar({
 
         // Pi types (right-associative, domain must be (identifier: type))
     pi: $ => choice(
-      prec.right(PRECEDENCE.syntactic.arrow, seq(field('domain', $._pidomain), alias('->', $.explicit), field('codomain', $.type_expr))),
-      prec.right(PRECEDENCE.syntactic.arrow, seq(field('domain', $._pidomain), alias('=>', $.implicit), field('codomain', $.type_expr)))
+      prec.right(PRECEDENCE.syntactic.arrow, seq(field('domain', $._pidomain), field("icit", alias('->', $.explicit)), field('codomain', $.type_expr))),
+      prec.right(PRECEDENCE.syntactic.arrow, seq(field('domain', $._pidomain), field("icit", alias('=>', $.implicit)), field('codomain', $.type_expr)))
     ),
 
     // Simple arrow types (right-associative)
     arrow: $ => choice(
-      prec.right(PRECEDENCE.syntactic.arrow, seq(field('domain', $._arrdomain), alias('->', $.explicit), field('codomain', $.type_expr))),
+      prec.right(PRECEDENCE.syntactic.arrow, seq(field('domain', $._arrdomain), field("icit", alias('->', $.explicit)), field('codomain', $.type_expr))),
       // prec.right(PRECEDENCE.syntactic.arrow, seq(field('domain', $.expr), alias('->', $.explicit_arrow), field('codomain', $.expr))),
-      prec.right(PRECEDENCE.syntactic.arrow, seq(field('domain', $._arrdomain), alias('=>', $.implicit), field('codomain', $.type_expr))),
+      prec.right(PRECEDENCE.syntactic.arrow, seq(field('domain', $._arrdomain), field("icit", alias('=>', $.implicit)), field('codomain', $.type_expr))),
       // prec.right(PRECEDENCE.syntactic.arrow, seq(field('domain', $.expr), alias('=>', $.implicit_arrow), field('codomain', $.expr)))
     ),
 

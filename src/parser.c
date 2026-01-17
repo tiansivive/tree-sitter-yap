@@ -13,7 +13,7 @@
 #define ALIAS_COUNT 5
 #define TOKEN_COUNT 64
 #define EXTERNAL_TOKEN_COUNT 0
-#define FIELD_COUNT 31
+#define FIELD_COUNT 32
 #define MAX_ALIAS_SEQUENCE_LENGTH 7
 #define MAX_RESERVED_WORD_SET_SIZE 0
 #define PRODUCTION_ID_COUNT 46
@@ -1047,27 +1047,28 @@ enum ts_field_identifiers {
   field_expr = 8,
   field_field = 9,
   field_function = 10,
-  field_implicit = 11,
-  field_index = 12,
-  field_key = 13,
-  field_left = 14,
-  field_name = 15,
-  field_operand = 16,
-  field_operator = 17,
-  field_params = 18,
-  field_pattern = 19,
-  field_payload = 20,
-  field_record = 21,
-  field_return = 22,
-  field_right = 23,
-  field_statement = 24,
-  field_subject = 25,
-  field_tag = 26,
-  field_tail = 27,
-  field_type = 28,
-  field_updates = 29,
-  field_value = 30,
-  field_variant = 31,
+  field_icit = 11,
+  field_implicit = 12,
+  field_index = 13,
+  field_key = 14,
+  field_left = 15,
+  field_name = 16,
+  field_operand = 17,
+  field_operator = 18,
+  field_params = 19,
+  field_pattern = 20,
+  field_payload = 21,
+  field_record = 22,
+  field_return = 23,
+  field_right = 24,
+  field_statement = 25,
+  field_subject = 26,
+  field_tag = 27,
+  field_tail = 28,
+  field_type = 29,
+  field_updates = 30,
+  field_value = 31,
+  field_variant = 32,
 };
 
 static const char * const ts_field_names[] = {
@@ -1082,6 +1083,7 @@ static const char * const ts_field_names[] = {
   [field_expr] = "expr",
   [field_field] = "field",
   [field_function] = "function",
+  [field_icit] = "icit",
   [field_implicit] = "implicit",
   [field_index] = "index",
   [field_key] = "key",
@@ -1124,31 +1126,31 @@ static const TSMapSlice ts_field_map_slices[PRODUCTION_ID_COUNT] = {
   [18] = {.index = 22, .length = 2},
   [19] = {.index = 24, .length = 2},
   [20] = {.index = 26, .length = 2},
-  [21] = {.index = 28, .length = 2},
-  [22] = {.index = 28, .length = 2},
-  [23] = {.index = 30, .length = 2},
-  [24] = {.index = 32, .length = 2},
-  [25] = {.index = 34, .length = 2},
-  [26] = {.index = 34, .length = 2},
-  [27] = {.index = 36, .length = 2},
-  [28] = {.index = 38, .length = 2},
-  [29] = {.index = 40, .length = 2},
-  [30] = {.index = 42, .length = 1},
-  [31] = {.index = 43, .length = 1},
-  [32] = {.index = 44, .length = 2},
-  [33] = {.index = 46, .length = 2},
-  [34] = {.index = 48, .length = 3},
-  [35] = {.index = 51, .length = 3},
-  [36] = {.index = 54, .length = 2},
-  [37] = {.index = 56, .length = 2},
-  [38] = {.index = 58, .length = 3},
-  [39] = {.index = 61, .length = 4},
-  [40] = {.index = 65, .length = 4},
-  [41] = {.index = 69, .length = 3},
-  [42] = {.index = 72, .length = 2},
-  [43] = {.index = 74, .length = 2},
-  [44] = {.index = 76, .length = 2},
-  [45] = {.index = 78, .length = 2},
+  [21] = {.index = 28, .length = 3},
+  [22] = {.index = 28, .length = 3},
+  [23] = {.index = 31, .length = 2},
+  [24] = {.index = 33, .length = 2},
+  [25] = {.index = 35, .length = 2},
+  [26] = {.index = 35, .length = 2},
+  [27] = {.index = 37, .length = 2},
+  [28] = {.index = 39, .length = 2},
+  [29] = {.index = 41, .length = 2},
+  [30] = {.index = 43, .length = 1},
+  [31] = {.index = 44, .length = 1},
+  [32] = {.index = 45, .length = 2},
+  [33] = {.index = 47, .length = 2},
+  [34] = {.index = 49, .length = 3},
+  [35] = {.index = 52, .length = 3},
+  [36] = {.index = 55, .length = 2},
+  [37] = {.index = 57, .length = 2},
+  [38] = {.index = 59, .length = 3},
+  [39] = {.index = 62, .length = 4},
+  [40] = {.index = 66, .length = 4},
+  [41] = {.index = 70, .length = 3},
+  [42] = {.index = 73, .length = 2},
+  [43] = {.index = 75, .length = 2},
+  [44] = {.index = 77, .length = 2},
+  [45] = {.index = 79, .length = 2},
 };
 
 static const TSFieldMapEntry ts_field_map_entries[] = {
@@ -1201,76 +1203,77 @@ static const TSFieldMapEntry ts_field_map_entries[] = {
   [28] =
     {field_codomain, 2},
     {field_domain, 0},
-  [30] =
+    {field_icit, 1},
+  [31] =
     {field_name, 1},
     {field_value, 3},
-  [32] =
+  [33] =
     {field_body, 3},
     {field_name, 1},
-  [34] =
+  [35] =
     {field_body, 3},
     {field_params, 1},
-  [36] =
+  [37] =
     {field_element, 1},
     {field_element, 2},
-  [38] =
+  [39] =
     {field_field, 1},
     {field_field, 2},
-  [40] =
+  [41] =
     {field_key, 0},
     {field_value, 2},
-  [42] =
-    {field_updates, 2},
   [43] =
-    {field_value, 1},
+    {field_updates, 2},
   [44] =
+    {field_value, 1},
+  [45] =
     {field_return, 2},
     {field_statement, 1},
-  [46] =
+  [47] =
     {field_branch, 0, .inherited = true},
     {field_branch, 1, .inherited = true},
-  [48] =
+  [49] =
     {field_element, 1},
     {field_tail, 2},
     {field_tail, 3},
-  [51] =
+  [52] =
     {field_field, 1},
     {field_tail, 2},
     {field_tail, 3},
-  [54] =
+  [55] =
     {field_updates, 2},
     {field_updates, 3},
-  [56] =
+  [57] =
     {field_record, 1},
     {field_updates, 3},
-  [58] =
+  [59] =
     {field_name, 1},
     {field_type, 3},
     {field_value, 5},
-  [61] =
+  [62] =
     {field_element, 1},
     {field_element, 2},
     {field_tail, 3},
     {field_tail, 4},
-  [65] =
+  [66] =
     {field_field, 1},
     {field_field, 2},
     {field_tail, 3},
     {field_tail, 4},
-  [69] =
+  [70] =
     {field_record, 1},
     {field_updates, 3},
     {field_updates, 4},
-  [72] =
+  [73] =
     {field_body, 3},
     {field_pattern, 1},
-  [74] =
+  [75] =
     {field_index, 2},
     {field_type, 5},
-  [76] =
+  [77] =
     {field_key, 0},
     {field_pattern, 2},
-  [78] =
+  [79] =
     {field_tail, 1},
     {field_tail, 2},
 };
