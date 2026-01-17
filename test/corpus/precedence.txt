@@ -16,8 +16,9 @@ Lambda with application
       (application
         (variable
           (identifier))
-        (variable
-          (identifier))))))
+        (argument
+          (variable
+            (identifier)))))))
 
 ==================
 Projection with application
@@ -34,8 +35,9 @@ x.y z
         (variable
           (identifier))
         (identifier))
-      (variable
-        (identifier)))))
+      (argument
+        (variable
+          (identifier))))))
 
 ==================
 Lambda with projection
@@ -77,8 +79,9 @@ Lambda with projection and application
           (variable
             (identifier))
           (identifier))
-        (variable
-          (identifier))))))
+        (argument
+          (variable
+            (identifier)))))))
 
 ==================
 Lambda with chained projections
@@ -102,8 +105,9 @@ Lambda with chained projections
               (identifier))
             (identifier))
           (identifier))
-        (variable
-          (identifier))))))
+        (argument
+          (variable
+            (identifier)))))))
 
 ==================
 Application chaining
@@ -116,13 +120,14 @@ f a b
 (source_file
   (script
     (application
-      (application
-        (variable
-          (identifier))
+      (variable
+        (identifier))
+      (argument
         (variable
           (identifier)))
-      (variable
-        (identifier)))))
+      (argument
+        (variable
+          (identifier))))))
 
 ==================
 Multiplicative binds tighter than additive
@@ -179,8 +184,10 @@ a && b || c
       (operation
         (variable
           (identifier))
+        (and)
         (variable
           (identifier)))
+      (or)
       (variable
         (identifier)))))
 
@@ -198,11 +205,14 @@ a && b || c && d
       (operation
         (variable
           (identifier))
+        (and)
         (variable
           (identifier)))
+      (or)
       (operation
         (variable
           (identifier))
+        (and)
         (variable
           (identifier))))))
 
@@ -222,6 +232,7 @@ a < b && b < c
           (identifier))
         (variable
           (identifier)))
+      (and)
       (operation
         (variable
           (identifier))
@@ -328,7 +339,7 @@ Annotation with pi type
           (identifier))
         (arrow
           (literal)
-          (explicit_arrow)
+          (explicit)
           (literal))))))
 
 ==================
@@ -345,24 +356,26 @@ Pi with applications
       (typing
         (identifier)
         (literal))
-      (explicit_arrow)
+      (explicit)
       (pi
         (typing
           (identifier)
           (literal))
-        (explicit_arrow)
+        (explicit)
         (arrow
           (application
             (variable
               (identifier))
-            (variable
-              (identifier)))
-          (explicit_arrow)
+            (argument
+              (variable
+                (identifier))))
+          (explicit)
           (application
             (variable
               (identifier))
-            (variable
-              (identifier))))))))
+            (argument
+              (variable
+                (identifier)))))))))
 
 ==================
 Pi with struct
@@ -378,12 +391,12 @@ Pi with struct
       (typing
         (identifier)
         (literal))
-      (explicit_arrow)
+      (explicit)
       (pi
         (typing
           (identifier)
           (literal))
-        (explicit_arrow)
+        (explicit)
         (struct
           (key_value
             (key
@@ -409,6 +422,6 @@ f @ x
     (application
       (variable
         (identifier))
-      (implicit_application)
-      (variable
-        (identifier)))))
+      (argument
+        (variable
+          (identifier))))))

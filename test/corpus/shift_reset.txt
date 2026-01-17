@@ -54,8 +54,9 @@ reset f x
       (application
         (variable
           (identifier))
-        (variable
-          (identifier))))))
+        (argument
+          (variable
+            (identifier)))))))
 
 ==================
 Reset with lambda
@@ -127,10 +128,11 @@ f (shift x)
     (application
       (variable
         (identifier))
-      (parenthesized
-        (shift
-          (variable
-            (identifier)))))))
+      (argument
+        (parenthesized
+          (shift
+            (variable
+              (identifier))))))))
 
 ==================
 Nested reset-shift
@@ -162,4 +164,3 @@ reset shift resume x
         (resume
           (variable
             (identifier)))))))
-

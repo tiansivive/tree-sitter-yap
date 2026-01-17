@@ -36,16 +36,17 @@ Lambda with multiple params
           (identifier)))
       (explicit_arrow)
       (application
-        (application
-          (application
-            (variable
-              (identifier))
-            (variable
-              (identifier)))
+        (variable
+          (identifier))
+        (argument
           (variable
             (identifier)))
-        (variable
-          (identifier))))))
+        (argument
+          (variable
+            (identifier)))
+        (argument
+          (variable
+            (identifier)))))))
 
 ==================
 Lambda with typed param
@@ -157,8 +158,9 @@ Lambda body with projection and application
           (variable
             (identifier))
           (identifier))
-        (variable
-          (identifier))))))
+        (argument
+          (variable
+            (identifier)))))))
 
 ==================
 Lambda with record type
@@ -200,7 +202,7 @@ Int -> String
     (arrow
       (variable
         (identifier))
-      (explicit_arrow)
+      (explicit)
       (variable
         (identifier)))))
 
@@ -217,11 +219,11 @@ Int -> String -> Bool
     (arrow
       (variable
         (identifier))
-      (explicit_arrow)
+      (explicit)
       (arrow
         (variable
           (identifier))
-        (explicit_arrow)
+        (explicit)
         (variable
           (identifier))))))
 
@@ -238,7 +240,7 @@ Int => String
     (arrow
       (variable
         (identifier))
-      (implicit_arrow)
+      (implicit)
       (variable
         (identifier)))))
 
@@ -257,7 +259,7 @@ Dependent pi type
         (identifier)
         (variable
           (identifier)))
-      (explicit_arrow)
+      (explicit)
       (variable
         (identifier)))))
 
@@ -291,7 +293,7 @@ Parenthesized complex type
           (identifier)
           (variable
             (identifier)))
-        (explicit_arrow)
+        (explicit)
         (variable
           (identifier))))))
 
@@ -299,7 +301,7 @@ Parenthesized complex type
 Mu type
 ==================
 
-μ list -> | #Nil | #Cons a list
+μ list -> | #Nil Unit | #Cons {a, list}
 
 ---
 
@@ -310,11 +312,11 @@ Mu type
       (variant
         (tagged
           (identifier)
-          (variant
-            (tagged
-              (identifier)
-              (application
-                (variable
-                  (identifier))
-                (variable
-                  (identifier))))))))))
+          (literal))
+        (tagged
+          (identifier)
+          (tuple
+            (variable
+              (identifier))
+            (variable
+              (identifier))))))))

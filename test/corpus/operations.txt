@@ -219,6 +219,7 @@ a && b
     (operation
       (variable
         (identifier))
+      (and)
       (variable
         (identifier)))))
 
@@ -235,6 +236,7 @@ a || b
     (operation
       (variable
         (identifier))
+      (or)
       (variable
         (identifier)))))
 
@@ -308,6 +310,7 @@ a < b && b < c
           (identifier))
         (variable
           (identifier)))
+      (and)
       (operation
         (variable
           (identifier))
@@ -328,11 +331,14 @@ a && b || c && d
       (operation
         (variable
           (identifier))
+        (and)
         (variable
           (identifier)))
+      (or)
       (operation
         (variable
           (identifier))
+        (and)
         (variable
           (identifier))))))
 
@@ -400,11 +406,13 @@ x < y && y < z && z < w
             (identifier))
           (variable
             (identifier)))
+        (and)
         (operation
           (variable
             (identifier))
           (variable
             (identifier))))
+      (and)
       (operation
         (variable
           (identifier))
@@ -425,10 +433,12 @@ f x + g y
       (application
         (variable
           (identifier))
-        (variable
-          (identifier)))
+        (argument
+          (variable
+            (identifier))))
       (application
         (variable
           (identifier))
-        (variable
-          (identifier))))))
+        (argument
+          (variable
+            (identifier)))))))

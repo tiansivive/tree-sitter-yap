@@ -107,8 +107,9 @@ Block with complex expressions
           (application
             (variable
               (identifier))
-            (literal
-              (number)))
+            (argument
+              (literal
+                (number))))
           (variable
             (identifier)))))))
 
@@ -167,13 +168,14 @@ let f = g x y
     (letdec
       (identifier)
       (application
-        (application
-          (variable
-            (identifier))
+        (variable
+          (identifier))
+        (argument
           (variable
             (identifier)))
-        (variable
-          (identifier))))))
+        (argument
+          (variable
+            (identifier)))))))
 
 ==================
 Let with struct value
@@ -215,12 +217,13 @@ Statement with return type annotation
           (application
             (variable
               (identifier))
-            (variable
-              (identifier)))
+            (argument
+              (variable
+                (identifier))))
           (arrow
             (variable
               (identifier))
-            (explicit_arrow)
+            (explicit)
             (variable
               (identifier))))))))
 

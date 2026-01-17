@@ -215,7 +215,7 @@ Variant with multiple tags
 Tagged with variant payload
 ==================
 
-#Either | #Left a | #Right b
+#Either (| #Left a | #Right b)
 
 ---
 
@@ -223,15 +223,16 @@ Tagged with variant payload
   (script
     (tagged
       (identifier)
-      (variant
-        (tagged
-          (identifier)
-          (variable
-            (identifier)))
-        (tagged
-          (identifier)
-          (variable
-            (identifier)))))))
+      (parenthesized
+        (variant
+          (tagged
+            (identifier)
+            (variable
+              (identifier)))
+          (tagged
+            (identifier)
+            (variable
+              (identifier))))))))
 
 ==================
 Struct with tail variable

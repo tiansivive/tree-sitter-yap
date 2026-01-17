@@ -8,6 +8,10 @@
         "named": true
       },
       {
+        "type": "dict",
+        "named": true
+      },
+      {
         "type": "hole",
         "named": true
       },
@@ -94,10 +98,6 @@
         "named": true
       },
       {
-        "type": "type_expr",
-        "named": true
-      },
-      {
         "type": "unary",
         "named": true
       }
@@ -146,15 +146,15 @@
     "named": true,
     "subtypes": [
       {
-        "type": "expr",
-        "named": true
-      },
-      {
         "type": "foreign",
         "named": true
       },
       {
         "type": "letdec",
+        "named": true
+      },
+      {
+        "type": "type_expr",
         "named": true
       },
       {
@@ -172,7 +172,7 @@
         "named": true
       },
       {
-        "type": "dict",
+        "type": "expr",
         "named": true
       },
       {
@@ -238,7 +238,7 @@
         "required": true,
         "types": [
           {
-            "type": "expr",
+            "type": "type_expr",
             "named": true
           }
         ]
@@ -310,7 +310,7 @@
         "required": true,
         "types": [
           {
-            "type": "expr",
+            "type": "type_expr",
             "named": true
           }
         ]
@@ -332,7 +332,7 @@
             "named": false
           },
           {
-            "type": "expr",
+            "type": "type_expr",
             "named": true
           }
         ]
@@ -343,11 +343,11 @@
       "required": true,
       "types": [
         {
-          "type": "explicit_arrow",
+          "type": "explicit",
           "named": true
         },
         {
-          "type": "implicit_arrow",
+          "type": "implicit",
           "named": true
         }
       ]
@@ -372,7 +372,7 @@
         "required": true,
         "types": [
           {
-            "type": "expr",
+            "type": "type_expr",
             "named": true
           }
         ]
@@ -433,7 +433,7 @@
         "required": true,
         "types": [
           {
-            "type": "expr",
+            "type": "type_expr",
             "named": true
           }
         ]
@@ -464,11 +464,11 @@
       "required": true,
       "types": [
         {
-          "type": "expr",
+          "type": "identifier",
           "named": true
         },
         {
-          "type": "identifier",
+          "type": "type_expr",
           "named": true
         }
       ]
@@ -561,7 +561,7 @@
         "required": true,
         "types": [
           {
-            "type": "expr",
+            "type": "type_expr",
             "named": true
           }
         ]
@@ -577,7 +577,7 @@
         "required": true,
         "types": [
           {
-            "type": "expr",
+            "type": "type_expr",
             "named": true
           }
         ]
@@ -627,7 +627,7 @@
         "required": false,
         "types": [
           {
-            "type": "expr",
+            "type": "type_expr",
             "named": true
           }
         ]
@@ -637,7 +637,7 @@
         "required": true,
         "types": [
           {
-            "type": "expr",
+            "type": "type_expr",
             "named": true
           }
         ]
@@ -657,7 +657,7 @@
             "named": false
           },
           {
-            "type": "expr",
+            "type": "type_expr",
             "named": true
           }
         ]
@@ -778,7 +778,7 @@
         "required": true,
         "types": [
           {
-            "type": "expr",
+            "type": "type_expr",
             "named": true
           }
         ]
@@ -943,7 +943,7 @@
       "required": true,
       "types": [
         {
-          "type": "expr",
+          "type": "type_expr",
           "named": true
         }
       ]
@@ -1146,7 +1146,7 @@
         "required": true,
         "types": [
           {
-            "type": "expr",
+            "type": "type_expr",
             "named": true
           }
         ]
@@ -1179,11 +1179,11 @@
       "required": true,
       "types": [
         {
-          "type": "explicit_arrow",
+          "type": "explicit",
           "named": true
         },
         {
-          "type": "implicit_arrow",
+          "type": "implicit",
           "named": true
         }
       ]
@@ -1261,7 +1261,7 @@
         "required": true,
         "types": [
           {
-            "type": "expr",
+            "type": "type_expr",
             "named": true
           }
         ]
@@ -1426,7 +1426,7 @@
             "named": false
           },
           {
-            "type": "expr",
+            "type": "type_expr",
             "named": true
           }
         ]
@@ -1456,11 +1456,11 @@
       "required": true,
       "types": [
         {
-          "type": "expr",
+          "type": "identifier",
           "named": true
         },
         {
-          "type": "identifier",
+          "type": "type_expr",
           "named": true
         }
       ]
@@ -1704,6 +1704,10 @@
     "extra": true
   },
   {
+    "type": "explicit",
+    "named": true
+  },
+  {
     "type": "explicit_arrow",
     "named": true
   },
@@ -1729,6 +1733,10 @@
   },
   {
     "type": "identifier",
+    "named": true
+  },
+  {
+    "type": "implicit",
     "named": true
   },
   {
