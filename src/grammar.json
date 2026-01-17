@@ -3143,8 +3143,7 @@
     "expr",
     "pattern",
     "atom",
-    "statement",
-    "literal"
+    "statement"
   ],
   "reserved": {}
 }

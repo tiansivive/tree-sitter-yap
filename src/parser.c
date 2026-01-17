@@ -17,7 +17,7 @@
 #define MAX_ALIAS_SEQUENCE_LENGTH 7
 #define MAX_RESERVED_WORD_SET_SIZE 0
 #define PRODUCTION_ID_COUNT 59
-#define SUPERTYPE_COUNT 6
+#define SUPERTYPE_COUNT 5
 
 enum ts_symbol_identifiers {
   sym_identifier = 1,
@@ -802,9 +802,8 @@ static const TSSymbolMetadata ts_symbol_metadata[] = {
     .named = true,
   },
   [sym_literal] = {
-    .visible = false,
+    .visible = true,
     .named = true,
-    .supertype = true,
   },
   [sym_number] = {
     .visible = true,
@@ -2205,7 +2204,6 @@ static const TSStateId ts_primary_state_ids[STATE_COUNT] = {
 static const TSSymbol ts_supertype_symbols[SUPERTYPE_COUNT] = {
   sym_atom,
   sym_expr,
-  sym_literal,
   sym_pattern,
   sym_statement,
   sym_type_expr,
@@ -2214,10 +2212,9 @@ static const TSSymbol ts_supertype_symbols[SUPERTYPE_COUNT] = {
 static const TSMapSlice ts_supertype_map_slices[] = {
   [sym_atom] = {.index = 0, .length = 16},
   [sym_expr] = {.index = 16, .length = 7},
-  [sym_literal] = {.index = 23, .length = 7},
-  [sym_pattern] = {.index = 30, .length = 8},
-  [sym_statement] = {.index = 38, .length = 4},
-  [sym_type_expr] = {.index = 42, .length = 6},
+  [sym_pattern] = {.index = 23, .length = 8},
+  [sym_statement] = {.index = 31, .length = 4},
+  [sym_type_expr] = {.index = 35, .length = 6},
 };
 
 static const TSSymbol ts_supertype_map_entries[] = {
@@ -2247,14 +2244,6 @@ static const TSSymbol ts_supertype_map_entries[] = {
     sym_operation,
     sym_unary,
   [23] =
-    anon_sym_BANG,
-    anon_sym_Row,
-    anon_sym_Type,
-    anon_sym_Unit,
-    sym_boolean,
-    sym_number,
-    sym_string,
-  [30] =
     sym_literal,
     sym_pattern_list,
     sym_pattern_row,
@@ -2263,12 +2252,12 @@ static const TSSymbol ts_supertype_map_entries[] = {
     sym_pattern_tuple,
     sym_variable,
     sym_wildcard,
-  [38] =
+  [31] =
     sym_foreign,
     sym_letdec,
     sym_type_expr,
     sym_using,
-  [42] =
+  [35] =
     sym_arrow,
     sym_expr,
     sym_modal,

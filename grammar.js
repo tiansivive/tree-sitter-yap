@@ -68,7 +68,6 @@ module.exports = grammar({
     $.pattern,
     $.atom,
     $.statement,
-    $.literal
   ],
 
   rules: {
