@@ -272,8 +272,8 @@ module.exports = grammar({
 
     // Lambda
     lambda: $ => prec.right(PRECEDENCE.syntactic.base, choice(
-      seq('\\', field('params', $.params), alias('->', $.explicit_arrow), field('body', $.type_expr)),
-      seq('\\', field('params', $.params), alias('=>', $.implicit_arrow), field('body', $.type_expr))
+      seq('\\', field('params', $.params), field("icit", alias('->', $.explicit)), field('body', $.type_expr)),
+      seq('\\', field('params', $.params), field("icit", alias('=>', $.implicit)), field('body', $.type_expr))
     )), 
 
     params: $ => choice(
@@ -340,7 +340,7 @@ module.exports = grammar({
 
     // Block
     block: $ => choice(
-      seq('{', field('statement', repeat(seq($.statement, ';'))), optional(field('return', $.return_statement)), '}'),
+      seq('{', repeat(seq(field('statement', $.statement), ';')), optional(field('return', $.return_statement)), '}'),
       seq('{', field('return', $.return_statement), '}')
     ),
 

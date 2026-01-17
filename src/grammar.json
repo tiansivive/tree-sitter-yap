@@ -1510,13 +1510,17 @@
                 }
               },
               {
-                "type": "ALIAS",
+                "type": "FIELD",
+                "name": "icit",
                 "content": {
-                  "type": "STRING",
-                  "value": "->"
-                },
-                "named": true,
-                "value": "explicit_arrow"
+                  "type": "ALIAS",
+                  "content": {
+                    "type": "STRING",
+                    "value": "->"
+                  },
+                  "named": true,
+                  "value": "explicit"
+                }
               },
               {
                 "type": "FIELD",
@@ -1544,13 +1548,17 @@
                 }
               },
               {
-                "type": "ALIAS",
+                "type": "FIELD",
+                "name": "icit",
                 "content": {
-                  "type": "STRING",
-                  "value": "=>"
-                },
-                "named": true,
-                "value": "implicit_arrow"
+                  "type": "ALIAS",
+                  "content": {
+                    "type": "STRING",
+                    "value": "=>"
+                  },
+                  "named": true,
+                  "value": "implicit"
+                }
               },
               {
                 "type": "FIELD",
@@ -2354,23 +2362,23 @@
               "value": "{"
             },
             {
-              "type": "FIELD",
-              "name": "statement",
+              "type": "REPEAT",
               "content": {
-                "type": "REPEAT",
-                "content": {
-                  "type": "SEQ",
-                  "members": [
-                    {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "FIELD",
+                    "name": "statement",
+                    "content": {
                       "type": "SYMBOL",
                       "name": "statement"
-                    },
-                    {
-                      "type": "STRING",
-                      "value": ";"
                     }
-                  ]
-                }
+                  },
+                  {
+                    "type": "STRING",
+                    "value": ";"
+                  }
+                ]
               }
             },
             {

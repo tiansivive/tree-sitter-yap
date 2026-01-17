@@ -382,10 +382,6 @@
         "required": false,
         "types": [
           {
-            "type": ";",
-            "named": false
-          },
-          {
             "type": "statement",
             "named": true
           }
@@ -586,6 +582,20 @@
           }
         ]
       },
+      "icit": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "explicit",
+            "named": true
+          },
+          {
+            "type": "implicit",
+            "named": true
+          }
+        ]
+      },
       "params": {
         "multiple": false,
         "required": true,
@@ -596,20 +606,6 @@
           }
         ]
       }
-    },
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "explicit_arrow",
-          "named": true
-        },
-        {
-          "type": "implicit_arrow",
-          "named": true
-        }
-      ]
     }
   },
   {
@@ -1700,10 +1696,6 @@
     "named": true
   },
   {
-    "type": "explicit_arrow",
-    "named": true
-  },
-  {
     "type": "export",
     "named": false
   },
@@ -1729,10 +1721,6 @@
   },
   {
     "type": "implicit",
-    "named": true
-  },
-  {
-    "type": "implicit_arrow",
     "named": true
   },
   {
