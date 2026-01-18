@@ -348,7 +348,7 @@ module.exports = grammar({
     return_statement: $ => seq('return', field('value', $.type_expr), ';'),
 
     // Pattern matching
-    match: $ => prec.right(PRECEDENCE.syntactic.alternative, seq('match', field('subject', $.expr), repeat1(seq("|", field('branch', $.alternative))))),
+    match: $ => prec.right(PRECEDENCE.syntactic.alternative, seq('match', field('subject', $.expr), prec.left(repeat1(seq("|", field('branch', $.alternative)))))),
 
     alternative: $ => prec.right(PRECEDENCE.syntactic.alternative, seq(field('pattern', $.pattern), '->', field('body', $.expr))),
 
