@@ -146,15 +146,15 @@
     "named": true,
     "subtypes": [
       {
+        "type": "expr",
+        "named": true
+      },
+      {
         "type": "foreign",
         "named": true
       },
       {
         "type": "letdec",
-        "named": true
-      },
-      {
-        "type": "type_expr",
         "named": true
       },
       {
@@ -1297,16 +1297,17 @@
   {
     "type": "script",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "statement",
-          "named": true
-        }
-      ]
+    "fields": {
+      "statement": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "statement",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {

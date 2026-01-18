@@ -38,6 +38,7 @@ const PRECEDENCE = {
     tail: 62,         // row/struct/list tail
     unary: 61,        // unary prefix operators
     application: 60,
+    alternative: 14,   // match alternatives
     arrow: 13,        // arrow, pi, lambda, mu - right-associative binding forms
     tag: 12,          // tagged constructors - right-associative
     key: 11,
@@ -50,7 +51,7 @@ module.exports = grammar({
   name: 'yap',
 
   conflicts: $ => [
-    [$.struct, $.block],
+    [$.block, $.struct],
     [$.pattern_list, $.pattern_row],
     // [$.annotation, $.arrdomain]
   ],
@@ -84,8 +85,8 @@ module.exports = grammar({
     ),
 
     script: $ => seq(
-      $.statement,
-      repeat(seq(';', $.statement)),
+      field('statement', $.statement),
+      repeat(seq(';', field('statement', $.statement))),
       optional(';')
     ),
 
@@ -106,7 +107,7 @@ module.exports = grammar({
       $.letdec,
       $.using,
       $.foreign,
-      $.type_expr
+      $.expr
     ),
 
     letdec: $ => choice(
@@ -137,7 +138,7 @@ module.exports = grammar({
       $.mu,
       $.variant,
       $.modal,
-      $.expr
+      $.expr,
     ),
     
     modal: $ => choice(
@@ -245,7 +246,7 @@ module.exports = grammar({
 
     boolean: $ => choice('true', 'false'),
 
-        // Pi types (right-associative, domain must be (identifier: type))
+    // Pi types (right-associative, domain must be (identifier: type))
     pi: $ => choice(
       prec.right(PRECEDENCE.syntactic.arrow, seq(field('domain', alias($.pidomain, $.domain)), field("icit", alias('->', $.explicit)), field('codomain', $.type_expr))),
       prec.right(PRECEDENCE.syntactic.arrow, seq(field('domain', alias($.pidomain, $.domain)), field("icit", alias('=>', $.implicit)), field('codomain', $.type_expr)))
@@ -304,7 +305,7 @@ module.exports = grammar({
     // Struct
     struct: $ => choice(
       seq('{', '}'),
-      seq('{', field('field', sep1($.key_value, ',')), prec.right(PRECEDENCE.syntactic.tail, optional(field("tail", seq('|', $.identifier)))), '}')
+      prec.right(PRECEDENCE.syntactic.base, seq('{', field('field', sep1($.key_value, ',')), prec.right(PRECEDENCE.syntactic.tail, optional(field("tail", seq('|', $.identifier)))), '}'))
     ),
     // Tuple
     tuple: $ => seq('{', field('element', sep1($.type_expr, ',')), prec.right(PRECEDENCE.syntactic.tail, optional(field("tail", seq('|', $.identifier)))), '}'),
@@ -347,9 +348,9 @@ module.exports = grammar({
     return_statement: $ => seq('return', field('value', $.type_expr), ';'),
 
     // Pattern matching
-    match: $ => prec.right(PRECEDENCE.syntactic.base, seq('match', field('subject', $.expr), repeat1(field('branch', $.alternative)))),
+    match: $ => prec.right(PRECEDENCE.syntactic.alternative, seq('match', field('subject', $.expr), repeat1(seq("|", field('branch', $.alternative))))),
 
-    alternative: $ => prec.right(PRECEDENCE.syntactic.base, seq('|', field('pattern', $.pattern), '->', field('body', $.expr))),
+    alternative: $ => prec.right(PRECEDENCE.syntactic.alternative, seq(field('pattern', $.pattern), '->', field('body', $.expr))),
 
     pattern: $ => choice(
       $.variable,
