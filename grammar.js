@@ -353,7 +353,7 @@ module.exports = grammar({
     alternative: $ => prec.right(PRECEDENCE.syntactic.alternative, seq(field('pattern', $.pattern), '->', field('body', $.expr))),
 
     pattern: $ => choice(
-      $.variable,
+      $.identifier,
       $.literal,
       $.pattern_tagged,
       $.pattern_struct,

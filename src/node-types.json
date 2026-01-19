@@ -108,6 +108,10 @@
     "named": true,
     "subtypes": [
       {
+        "type": "identifier",
+        "named": true
+      },
+      {
         "type": "literal",
         "named": true
       },
@@ -129,10 +133,6 @@
       },
       {
         "type": "pattern_tuple",
-        "named": true
-      },
-      {
-        "type": "variable",
         "named": true
       },
       {
