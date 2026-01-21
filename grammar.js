@@ -117,8 +117,8 @@ module.exports = grammar({
 
     using: $ => seq(
       'using',
-      $.expr,
-      optional(seq('as', $.identifier))
+      field('expression', $.expr),
+      optional(seq('as', field('alias', $.identifier)))
     ),
 
     foreign: $ => seq(
