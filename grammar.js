@@ -273,18 +273,38 @@ module.exports = grammar({
 
     // Lambda
     lambda: $ => prec.right(PRECEDENCE.syntactic.base, choice(
-      seq('\\', field('params', $.params), field("icit", alias('->', $.explicit)), field('body', $.type_expr)),
-      seq('\\', field('params', $.params), field("icit", alias('=>', $.implicit)), field('body', $.type_expr))
-    )), 
+      // seq('\\', $.param, field("icit", alias('->', $.explicit)), field('body', $.type_expr)),
+      // seq('\\', $.param, field("icit", alias('=>', $.implicit)), field('body', $.type_expr)),
+      // seq('\\', $.rest, field("icit", alias('->', $.explicit)), field('body', $.type_expr)),
+      // seq('\\', $.rest, field("icit", alias('=>', $.implicit)), field('body', $.type_expr))
+      seq('\\', $.elam),
+      seq('\\', $.ilam) 
 
-    params: $ => choice(
-      repeat1($.param),
-      parens(sep1($.param, ','))
+    )),
+
+    // params rule is no longer used for lambda, but keep for other uses if needed
+    // params: $ => choice(
+    //   repeat1($.param),
+    //   parens(sep1($.param, ','))
+    // ),
+    elam: $ => choice(
+      seq($.param, '->', field('body', $.type_expr)),
+      seq($.param, field('body', $.elam))
+    ),
+
+    ilam: $ => choice(
+      seq($.param, '=>', field('body', $.type_expr)),
+      seq($.param, field('body', $.ilam))
     ),
 
     param: $ => choice(
       $.identifier,
      parens($.typing)
+    ),
+  
+    icit: $ => choice(
+      alias('->', $.explicit),
+      alias('=>', $.implicit)
     ),
 
     typing: $ => prec.right(PRECEDENCE.syntactic.base, seq($.identifier, ':', $.type_expr)),
