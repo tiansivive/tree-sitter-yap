@@ -457,17 +457,17 @@
             "named": true
           }
         ]
+      },
+      "param": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "param",
+            "named": true
+          }
+        ]
       }
-    },
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "param",
-          "named": true
-        }
-      ]
     }
   },
   {
@@ -521,17 +521,17 @@
             "named": true
           }
         ]
+      },
+      "param": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "param",
+            "named": true
+          }
+        ]
       }
-    },
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "param",
-          "named": true
-        }
-      ]
     }
   },
   {
@@ -627,20 +627,27 @@
   {
     "type": "lambda",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "elam",
-          "named": true
-        },
-        {
-          "type": "ilam",
-          "named": true
-        }
-      ]
+    "fields": {
+      "explicit": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "elam",
+            "named": true
+          }
+        ]
+      },
+      "implicit": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "ilam",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {

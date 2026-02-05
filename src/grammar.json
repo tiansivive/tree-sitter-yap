@@ -1526,7 +1526,7 @@
     },
     "lambda": {
       "type": "PREC_RIGHT",
-      "value": 10,
+      "value": 13,
       "content": {
         "type": "CHOICE",
         "members": [
@@ -1538,8 +1538,12 @@
                 "value": "\\"
               },
               {
-                "type": "SYMBOL",
-                "name": "elam"
+                "type": "FIELD",
+                "name": "explicit",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "elam"
+                }
               }
             ]
           },
@@ -1551,8 +1555,12 @@
                 "value": "\\"
               },
               {
-                "type": "SYMBOL",
-                "name": "ilam"
+                "type": "FIELD",
+                "name": "implicit",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "ilam"
+                }
               }
             ]
           }
@@ -1566,8 +1574,12 @@
           "type": "SEQ",
           "members": [
             {
-              "type": "SYMBOL",
-              "name": "param"
+              "type": "FIELD",
+              "name": "param",
+              "content": {
+                "type": "SYMBOL",
+                "name": "param"
+              }
             },
             {
               "type": "STRING",
@@ -1587,8 +1599,12 @@
           "type": "SEQ",
           "members": [
             {
-              "type": "SYMBOL",
-              "name": "param"
+              "type": "FIELD",
+              "name": "param",
+              "content": {
+                "type": "SYMBOL",
+                "name": "param"
+              }
             },
             {
               "type": "FIELD",
@@ -1609,8 +1625,12 @@
           "type": "SEQ",
           "members": [
             {
-              "type": "SYMBOL",
-              "name": "param"
+              "type": "FIELD",
+              "name": "param",
+              "content": {
+                "type": "SYMBOL",
+                "name": "param"
+              }
             },
             {
               "type": "STRING",
@@ -1630,8 +1650,12 @@
           "type": "SEQ",
           "members": [
             {
-              "type": "SYMBOL",
-              "name": "param"
+              "type": "FIELD",
+              "name": "param",
+              "content": {
+                "type": "SYMBOL",
+                "name": "param"
+              }
             },
             {
               "type": "FIELD",
